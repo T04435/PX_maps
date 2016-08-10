@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.VisualBasic.FileIO;
-using PX_maps.Models;
 using System.Configuration;
 
 namespace PX_maps.Controllers
@@ -41,6 +38,7 @@ namespace PX_maps.Controllers
                         string[] fieldData = csvReader.ReadFields();
                         for (int i = 0; i < fieldData.Length; i++)
                         {
+                            //if (DateTime.TryParseExact(fieldData[i], "ddd MMM dd hh:mm:ss K"))
                             if (fieldData[i] == "")
                             {
                                 fieldData[i] = null;
@@ -57,12 +55,13 @@ namespace PX_maps.Controllers
         }
         static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
         {
-            using (SqlConnection sql = new SqlConnection(GPSDBContext.ConnectionString))
+            using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
             {
+                string dbConnectionString = ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString;
                 dbConnection.Open();
-                using (SqlBulkCopy s = new SqlBulkCopy(dbConnection))
+                using (SqlBulkCopy s = new SqlBulkCopy(dbConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
-                    s.DestinationTableName = "GPS Data";
+                    s.DestinationTableName = "Test";
                     foreach (var column in csvFileData.Columns)
                         s.ColumnMappings.Add(column.ToString(), column.ToString());
                     s.WriteToServer(csvFileData);
