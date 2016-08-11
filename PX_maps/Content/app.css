@@ -1,0 +1,43 @@
+.pxm-sideMenu {
+  position: fixed;
+  background: tomato; }
+  .pxm-sideMenu,
+  .menu-trigger {
+    -webkit-transition: all 350ms ease;
+    -moz-transition: all 350ms ease;
+    transition: all 350ms ease; }
+  .pxm-sideMenu h3 {
+    font-size: 1.9rem;
+    padding: 1rem;
+    margin: 0;
+    font-weight: 300; }
+  .pxm-sideMenu input {
+    display: block; }
+  .pxm-sideMenu__vertical {
+    width: 50%;
+    height: 100%;
+    top: 0;
+    z-index: 500; }
+  .pxm-sideMenu__left {
+    left: -50%; }
+    .pxm-sideMenu__left.pxm-sideMenu-open {
+      left: 0; }
+  .pxm-sideMenu__right {
+    right: -50%; }
+    .pxm-sideMenu__right.pxm-sideMenu-open {
+      right: 0; }
+
+.menu-trigger {
+  position: fixed;
+  top: 25%;
+  height: 25%; }
+  .menu-trigger#showVisualizationMenu {
+    left: 0; }
+    #pxm-sideMenu-visualization.pxm-sideMenu-open + .menu-trigger#showVisualizationMenu {
+      left: 50%; }
+  .menu-trigger#showMapsMenu {
+    right: 0; }
+    #pxm-sideMenu-maps.pxm-sideMenu-open + .menu-trigger#showMapsMenu {
+      right: 50%; }
+
+/*# sourceMappingURL=app.css.map */
