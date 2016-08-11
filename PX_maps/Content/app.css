@@ -1,43 +1,99 @@
+/* Coolors Exported Palette - coolors.co/ef6461-f9dc5c-7fb069-f6f7eb-393e41 */
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+body {
+  overflow: hidden; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Francois One", sans-serif; }
+
 .pxm-sideMenu {
   position: fixed;
-  background: tomato; }
+  background: #393e41;
+  overflow-y: scroll; }
+  .pxm-sideMenu::-webkit-scrollbar {
+    display: none; }
   .pxm-sideMenu,
   .menu-trigger {
     -webkit-transition: all 350ms ease;
     -moz-transition: all 350ms ease;
     transition: all 350ms ease; }
   .pxm-sideMenu h3 {
-    font-size: 1.9rem;
-    padding: 1rem;
+    display: block;
+    text-align: center;
+    color: #f6f7eb;
+    border-bottom: solid 4px #f6f7eb;
+    padding: 10px 0;
     margin: 0;
-    font-weight: 300; }
-  .pxm-sideMenu input {
-    display: block; }
+    margin-bottom: 25px; }
+  .pxm-sideMenu .form-container {
+    padding: 1rem; }
+    .pxm-sideMenu .form-container input {
+      display: block;
+      width: 100%; }
   .pxm-sideMenu__vertical {
-    width: 50%;
+    width: 90%;
     height: 100%;
     top: 0;
     z-index: 500; }
   .pxm-sideMenu__left {
-    left: -50%; }
+    left: -90%; }
     .pxm-sideMenu__left.pxm-sideMenu-open {
       left: 0; }
   .pxm-sideMenu__right {
-    right: -50%; }
+    right: -90%; }
     .pxm-sideMenu__right.pxm-sideMenu-open {
       right: 0; }
 
 .menu-trigger {
   position: fixed;
-  top: 25%;
-  height: 25%; }
+  top: 45%;
+  z-index: 480;
+  background: #393e41;
+  color: #f6f7eb;
+  padding: 0.5em;
+  border-radius: 35%; }
+  .menu-trigger.fa {
+    font-size: 2.75rem; }
+  .menu-trigger.disable {
+    color: #ef6461;
+    pointer-events: none; }
   .menu-trigger#showVisualizationMenu {
-    left: 0; }
+    left: -20px;
+    padding-left: 20px; }
     #pxm-sideMenu-visualization.pxm-sideMenu-open + .menu-trigger#showVisualizationMenu {
-      left: 50%; }
+      left: calc( 90% - 20px );
+      z-index: 490; }
   .menu-trigger#showMapsMenu {
-    right: 0; }
+    right: -20px;
+    padding-right: 20px; }
     #pxm-sideMenu-maps.pxm-sideMenu-open + .menu-trigger#showMapsMenu {
-      right: 50%; }
+      right: calc( 90% - 20px );
+      z-index: 490; }
+
+/*
+ * 3DCSS code from here down will only be used for 3DCSS
+ */
+#D3ChartBar {
+  text-align: center; }
+  #D3ChartBar .D3bar {
+    width: 2rem;
+    margin-right: 0.25rem;
+    background: #29274c;
+    display: inline-block; }
+    #D3ChartBar .D3bar:nth-child(n + 11) {
+      background: #1b998b; }
+    #D3ChartBar .D3bar:nth-child(n + 21) {
+      background: #e78f8e; }
 
 /*# sourceMappingURL=app.css.map */

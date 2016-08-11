@@ -26,11 +26,14 @@ namespace PX_maps
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 								"~/Content/bootstrap.css",
 								"~/Content/site.css",
-								"~/Content/app.css"));
+								"~/Content/app.css",
+								"~/Content/font-awesome.min.css"));
 
 			bundles.Add(new ScriptBundle("~/Scripts/Site").Include(
 								"~/Scripts/app.js",
-								"~/Scripts/classie.js"));
+								"~/Scripts/classie.js",
+								"~/Scripts/d3.min.js"));
+			BundleTable.EnableOptimizations = true;
 		}
 	}
 }
