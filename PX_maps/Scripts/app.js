@@ -39,24 +39,3 @@ function disableOther(btn) {
 
 
 
-/*
- * 3DJS code from here down will only be used for 3DJS
- */
-
-//data set for 3D
-var dataset = [];
-//add random data to the dataset
-for (var i = 0; i < 30; i++) {
-	dataset.push(Math.random() * 50);
-}
-
-//selecting body
-var main = d3.select("#D3ChartBar");
-//appending to body
-var bars = main.selectAll("div");
-var enteredData = bars.data(dataset).enter();
-var char = enteredData.append("div").attr("class", "D3bar");
-char.style("height", function (d) {
-	return d * 5 + "px";
-});
-

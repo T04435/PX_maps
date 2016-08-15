@@ -1,4 +1,4 @@
-/* Coolors Exported Palette - coolors.co/ef6461-f9dc5c-7fb069-f6f7eb-393e41 */
+﻿/* Coolors Exported Palette - coolors.co/ef6461-f9dc5c-7fb069-f6f7eb-393e41 */
 *,
 *:after,
 *:before {
@@ -15,7 +15,10 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Francois One", sans-serif; }
+  font-family: "Francois One", sans-serif;
+  text-align: center;
+  text-transform: capitalize;
+  font-variant: small-caps; }
 
 .pxm-sideMenu {
   position: fixed;
@@ -30,7 +33,6 @@ h6 {
     transition: all 350ms ease; }
   .pxm-sideMenu h3 {
     display: block;
-    text-align: center;
     color: #f6f7eb;
     border-bottom: solid 4px #f6f7eb;
     padding: 10px 0;
@@ -72,28 +74,32 @@ h6 {
     left: -20px;
     padding-left: 20px; }
     #pxm-sideMenu-visualization.pxm-sideMenu-open + .menu-trigger#showVisualizationMenu {
-      left: calc( 90% - 20px );
+      left: calc( 90% - 20px);
       z-index: 490; }
   .menu-trigger#showMapsMenu {
     right: -20px;
     padding-right: 20px; }
     #pxm-sideMenu-maps.pxm-sideMenu-open + .menu-trigger#showMapsMenu {
-      right: calc( 90% - 20px );
+      right: calc( 90% - 20px);
       z-index: 490; }
 
 /*
  * 3DCSS code from here down will only be used for 3DCSS
  */
-#D3ChartBar {
-  text-align: center; }
-  #D3ChartBar .D3bar {
-    width: 2rem;
-    margin-right: 0.25rem;
-    background: #29274c;
-    display: inline-block; }
-    #D3ChartBar .D3bar:nth-child(n + 11) {
-      background: #1b998b; }
-    #D3ChartBar .D3bar:nth-child(n + 21) {
-      background: #e78f8e; }
+svg:not(:root) {
+  overflow: visible; }
 
-/*# sourceMappingURL=app.css.map */
+[class^="D3"] {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  transition: all 500ms ease; }
+
+#D3 {
+  text-align: center; }
+  #D3 .D3bar {
+    fill: #29274c; }
+    #D3 .D3bar:nth-child(n + 11) {
+      fill: #1b998b; }
+    #D3 .D3bar:nth-child(n + 21) {
+      fill: #e78f8e; }
+
