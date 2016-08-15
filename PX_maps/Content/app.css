@@ -103,3 +103,11 @@ svg:not(:root) {
     #D3 .D3bar:nth-child(n + 21) {
       fill: #e78f8e; }
 
+@media only screen and (max-width: 768px) {
+  /*svg {
+		transform: scaleX(0.275);
+		transform-origin: left;
+	}*/
+  .menu-trigger {
+    top: 5%; } }
+

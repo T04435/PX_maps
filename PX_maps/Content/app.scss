@@ -8,10 +8,10 @@ $menuTriggerPull: 20px;
 $headerFont: 'Francois One', sans-serif;
 $textFont: 'Titillium Web', sans-serif;
 
-@mixin transitionEase($timeMS){
+@mixin transitionEase($timeMS) {
 	-webkit-transition: all #{$timeMS}ms ease;
-			-moz-transition: all #{$timeMS}ms ease;
-			transition: all #{$timeMS}ms ease;
+	-moz-transition: all #{$timeMS}ms ease;
+	transition: all #{$timeMS}ms ease;
 }
 
 *,
@@ -33,9 +33,9 @@ h4,
 h5,
 h6 {
 	font-family: $headerFont;
-	text-align:center;
+	text-align: center;
 	text-transform: capitalize;
-	font-variant:small-caps;
+	font-variant: small-caps;
 }
 
 .pxm-sideMenu {
@@ -141,22 +141,37 @@ h6 {
  * 3DCSS code from here down will only be used for 3DCSS
  */
 svg:not(:root) {
-    overflow: visible;
+	overflow: visible;
 }
 
-[class^="D3"]{
+[class^="D3"] {
 	@include transitionEase(500);
 }
 
 #D3 {
-	text-align:center;
+	text-align: center;
+
 	& .D3bar {
 		fill: $D3purple;
-		&:nth-child(n + 11){
+
+		&:nth-child(n + 11) {
 			fill: $D3sea;
 		}
-		&:nth-child(n + 21){
+
+		&:nth-child(n + 21) {
 			fill: $D3pink;
 		}
+	}
+}
+
+
+@media only screen and (max-width: 768px) {
+
+	/*svg {
+		transform: scaleX(0.275);
+		transform-origin: left;
+	}*/
+	.menu-trigger{
+		top: 5%;
 	}
 }

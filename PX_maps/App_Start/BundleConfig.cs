@@ -34,7 +34,7 @@ namespace PX_maps
 								"~/Scripts/app.js",
 								"~/Scripts/classie.js",
 								"~/Scripts/d3.min.js"));
-			BundleTable.EnableOptimizations = true;
+			BundleTable.EnableOptimizations = false;
 		}
 	}
 }
