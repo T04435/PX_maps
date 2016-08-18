@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace PX_maps.Controllers
 {
@@ -28,6 +30,20 @@ namespace PX_maps.Controllers
                     csvReader.SetDelimiters(new string[] { "," });
                     csvReader.HasFieldsEnclosedInQuotes = false;
                     string[] colFields = csvReader.ReadFields();
+                    Regex datergx = new Regex(@"^[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
+
+                    if (!(colFields[0].Equals("deviceId~2")))
+                    {
+                        colFields[0] = "deviceId~2";
+                        colFields[1] = "latitude";
+                        colFields[2] = "longitude";
+                        colFields[3] = "speed~1";
+                        colFields[4] = "reliability~4";
+                        colFields[5] = "satellite";
+                        colFields[6] = "type~4";
+                        colFields[7] = "lock~4";
+                        colFields[8] = "isoDate~9";
+                    }
                     foreach (string column in colFields)
                     {
                         DataColumn datecolumn = new DataColumn(column);
@@ -38,10 +54,14 @@ namespace PX_maps.Controllers
                         string[] fieldData = csvReader.ReadFields();
                         for (int i = 0; i < fieldData.Length; i++)
                         {
-                            //if (DateTime.TryParseExact(fieldData[i], "ddd MMM dd hh:mm:ss K"))
-                            if (fieldData[i] == "")
-                            {
-                                fieldData[i] = null;
+                            if (datergx.IsMatch(fieldData[i]))
+                            {        
+                                Regex timezone = new Regex(@"\sICT");
+                                string pattern = "ddd MMM dd hh:mm:ss yyyy";
+                                DateTime parsedDate;
+                                fieldData[i] = timezone.Replace(fieldData[i], "");
+                                DateTime.TryParseExact(fieldData[i],pattern,null, DateTimeStyles.None,out parsedDate);
+                                fieldData[i] = parsedDate.ToString();
                             }
                         }
                         csvData.Rows.Add(fieldData);
@@ -62,10 +82,9 @@ namespace PX_maps.Controllers
                 using (SqlBulkCopy s = new SqlBulkCopy(dbConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
                     s.DestinationTableName = "Test";
-                    foreach (var column in csvFileData.Columns)
-                        s.ColumnMappings.Add(column.ToString(), column.ToString());
                     s.WriteToServer(csvFileData);
                 }
+                dbConnection.Close();
             }
         }
         [HttpPost]
