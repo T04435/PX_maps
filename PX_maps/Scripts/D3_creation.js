@@ -28,6 +28,8 @@ function donutChart() {
 	const color = d3.scaleOrdinal(d3.schemeCategory20b);
 	const legendSize = 20;
 	const legendPadding = 4;
+
+
 	let D3SVG = d3.select('#D3')
 		.append('svg')
 		.attr('width', width)
@@ -127,7 +129,8 @@ function barChart() {
 	var barPadding = 2;
 	var SVG = D3Container.append("svg")
 	.attr("width", "100%")
-	.attr("height", h);
+	.attr("height", h)
+	.classed('barChart', true);
 
 
 
