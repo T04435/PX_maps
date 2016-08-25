@@ -1,13 +1,14 @@
+using Microsoft.VisualBasic.FileIO;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.VisualBasic.FileIO;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace PX_maps.Controllers
 {
@@ -29,42 +30,51 @@ namespace PX_maps.Controllers
                 {
                     csvReader.SetDelimiters(new string[] { "," });
                     csvReader.HasFieldsEnclosedInQuotes = false;
-                    string[] colFields = csvReader.ReadFields();
-                    Regex datergx = new Regex(@"^[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
+                    string[] colFields = new string[9];
 
-                    if (!(colFields[0].Equals("deviceId~2")))
-                    {
-                        colFields[0] = "deviceId~2";
-                        colFields[1] = "latitude";
-                        colFields[2] = "longitude";
-                        colFields[3] = "speed~1";
-                        colFields[4] = "reliability~4";
-                        colFields[5] = "satellite";
-                        colFields[6] = "type~4";
-                        colFields[7] = "lock~4";
-                        colFields[8] = "isoDate~9";
-                    }
+                    colFields[0] = "deviceId~2";
+                    colFields[1] = "latitude";
+                    colFields[2] = "longitude";
+                    colFields[3] = "speed~1";
+                    colFields[4] = "reliability~4";
+                    colFields[5] = "satellite";
+                    colFields[6] = "type~4";
+                    colFields[7] = "lock~4";
+                    colFields[8] = "isoDate~9";
+                    Regex csvrgx = new Regex(@"^\w{3,9}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,2}\,\d\.\d\,\d\,\d\,\d\,[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
                     foreach (string column in colFields)
                     {
                         DataColumn datecolumn = new DataColumn(column);
                         csvData.Columns.Add(datecolumn);
                     }
+
                     while (!csvReader.EndOfData)
                     {
                         string[] fieldData = csvReader.ReadFields();
-                        for (int i = 0; i < fieldData.Length; i++)
+                        string fieldDataString = string.Join(",", fieldData);
+                        if (csvrgx.IsMatch(fieldDataString))
                         {
-                            if (datergx.IsMatch(fieldData[i]))
-                            {        
-                                Regex timezone = new Regex(@"\sICT");
-                                string pattern = "ddd MMM dd hh:mm:ss yyyy";
-                                DateTime parsedDate;
-                                fieldData[i] = timezone.Replace(fieldData[i], "");
-                                DateTime.TryParseExact(fieldData[i],pattern,null, DateTimeStyles.None,out parsedDate);
-                                fieldData[i] = parsedDate.ToString();
+                            for (int i = 0; i < fieldData.Length; i++)
+                            {
+                                Regex datergx = new Regex(@"^[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
+
+                                if (datergx.IsMatch(fieldData[i]))
+                                {
+                                    Regex timezone = new Regex(@"\sICT");
+                                    string pattern = "ddd MMM dd HH:mm:ss yyyy";
+                                    DateTime parsedDate;
+                                    fieldData[i] = timezone.Replace(fieldData[i], "");
+                                    DateTime.TryParseExact(fieldData[i], pattern, null, DateTimeStyles.AdjustToUniversal, out parsedDate);
+                                    fieldData[i] = parsedDate.ToString();
+                                }
+
                             }
+                            csvData.Rows.Add(fieldData);
                         }
-                        csvData.Rows.Add(fieldData);
+                        else
+                        {
+
+                        }
                     }
                 }
             }
@@ -72,6 +82,8 @@ namespace PX_maps.Controllers
             {
             }
             InsertDataIntoSQLServerUsingSQLBulkCopy(csvData);
+
+
         }
         static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
         {
@@ -88,20 +100,36 @@ namespace PX_maps.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Index(HttpPostedFileBase file)
+        public ActionResult Index(IList<HttpPostedFileBase> files)
         {
-
-            if (file.ContentLength > 0)
+            int count = files.Count;
+            foreach (var file in files)
             {
-                var fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                file.SaveAs(path);
+                if (file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    ListFilesLeft(fileName, count, files.Count);
+                    var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                    if (Path.GetFileName(path).Equals(fileName))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                    file.SaveAs(path);
 
-                GetDataTabletFromCSVFile(path);
+                    GetDataTabletFromCSVFile(path);
+                    System.IO.File.Delete(path);
+                }
+                count--;
             }
-
+            TempData["File"] = "<p>Done!</p>";
             return RedirectToAction("Index");
 
+        }
+        public ActionResult ListFilesLeft(string file, int count, int total)
+        {
+            System.Diagnostics.Debug.WriteLine("<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>");
+            TempData["File"] = "<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>";
+            return RedirectToAction("Running");
         }
     }
 }

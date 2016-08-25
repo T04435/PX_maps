@@ -8,10 +8,11 @@
 <h2>Index</h2>
 
 <p>Upload GPS data below</p>
+@Html.Raw(TempData["File"]);
 <form action="" method="post" enctype="multipart/form-data">
-
-    <label for="file">Filename:</label>
-    <input type="file" name="file" id="file" />
+    
+    <label for="files">Filename:</label>
+    <input type="file" name="files" id="files" accept=".txt,.csv" webkitdirectory directory multiple />
 
     <input type="submit" />
 </form>
