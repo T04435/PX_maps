@@ -1,0 +1,210 @@
+﻿@import 'palette';
+@import 'media-queries';
+
+$menuWindth: 90%;
+$menuZindex: 500;
+$menuTriggerTop: 45%;
+$menuTriggerPull: 20px;
+
+$headerFont: 'Francois One', sans-serif;
+$textFont: 'Titillium Web', sans-serif;
+
+@mixin transitionEase($timeMS) {
+	-webkit-transition: all #{$timeMS}ms ease;
+	-moz-transition: all #{$timeMS}ms ease;
+	transition: all #{$timeMS}ms ease;
+}
+
+*,
+*:after,
+*:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: $headerFont;
+	text-align: center;
+	text-transform: capitalize;
+	font-variant: small-caps;
+}
+
+.pxm-sideMenu {
+	position: fixed;
+	background: $black;
+	overflow-y: scroll;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	@at-root {
+		#{&},
+		.menu-trigger {
+			@include transitionEase(350);
+		}
+	}
+
+	& h3 {
+		display: block;
+		color: $white;
+		border-bottom: solid 4px $white;
+		padding: 10px 0;
+		margin: 0;
+		margin-bottom: 25px;
+	}
+
+	& .form-container {
+		padding: 1rem;
+
+		& input {
+			display: block;
+			width: 100%;
+		}
+	}
+
+	@at-root #{&}__vertical {
+		width: $menuWindth;
+		height: 100%;
+		top: 0;
+		z-index: $menuZindex;
+	}
+
+	@at-root #{&}__left {
+		left: -$menuWindth;
+
+		&.pxm-sideMenu-open {
+			left: 0;
+		}
+	}
+
+	@at-root #{&}__right {
+		right: -$menuWindth;
+
+		&.pxm-sideMenu-open {
+			right: 0;
+		}
+	}
+}
+
+.menu-trigger {
+	position: fixed;
+	top: $menuTriggerTop;
+	z-index: $menuZindex - 20;
+	background: $black;
+	color: $white;
+	padding: 0.5em;
+	border-radius: 35%;
+
+	&.fa {
+		font-size: 2.75rem;
+	}
+
+	&.disable {
+		color: $red;
+		pointer-events: none;
+	}
+
+	&#showVisualizationMenu {
+		left: -$menuTriggerPull;
+		padding-left: $menuTriggerPull + 10px;
+
+		#pxm-sideMenu-visualization.pxm-sideMenu-open + & {
+			left: calc( #{$menuWindth} - #{$menuTriggerPull} );
+			z-index: $menuZindex - 10;
+		}
+	}
+
+	&#showMapsMenu {
+		right: -$menuTriggerPull;
+		padding-right: $menuTriggerPull + 10px;
+
+		#pxm-sideMenu-maps.pxm-sideMenu-open + & {
+			right: calc( #{$menuWindth} - #{$menuTriggerPull} );
+			z-index: $menuZindex - 10;
+		}
+	}
+}
+
+
+
+/*
+ * 3DCSS code from here down will only be used for 3DCSS
+ */
+svg:not(:root) {
+	overflow: visible;
+}
+
+[class^="D3"] {
+	@include transitionEase(500);
+}
+
+#D3 {
+	text-align: center;
+
+	& .D3bar {
+		fill: $D3purple;
+
+		&:nth-child(n + 11) {
+			fill: $D3sea;
+		}
+
+		&:nth-child(n + 21) {
+			fill: $D3pink;
+		}
+	}
+}
+
+
+@media only screen and (max-width: 768px) {
+
+	/*svg {
+		transform: scaleX(0.275);
+		transform-origin: left;
+	}*/
+	.menu-trigger {
+		top: 5%;
+	}
+}
+
+@include screen(320px, 640px, landscape) {
+	.barChart {
+		transform: scale(0.5);
+		transform-origin: left;
+	}
+}
+
+@include screen(320px, 640px, portrait) {
+	.barChart {
+		display: none;
+	}
+}
+
+
+
+/*
+ * GMAPS code from here down will only be used for GMAPS 
+ */
+
+
+#map {
+	height: 100%;
+	width : 100%;
+}

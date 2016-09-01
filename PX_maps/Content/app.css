@@ -1,0 +1,135 @@
+﻿/* Coolors Exported Palette - coolors.co/ef6461-f9dc5c-7fb069-f6f7eb-393e41 */
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+body {
+  overflow: hidden; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Francois One", sans-serif;
+  text-align: center;
+  text-transform: capitalize;
+  font-variant: small-caps; }
+
+.pxm-sideMenu {
+  position: fixed;
+  background: #393e41;
+  overflow-y: scroll; }
+  .pxm-sideMenu::-webkit-scrollbar {
+    display: none; }
+  .pxm-sideMenu,
+  .menu-trigger {
+    -webkit-transition: all 350ms ease;
+    -moz-transition: all 350ms ease;
+    transition: all 350ms ease; }
+  .pxm-sideMenu h3 {
+    display: block;
+    color: #f6f7eb;
+    border-bottom: solid 4px #f6f7eb;
+    padding: 10px 0;
+    margin: 0;
+    margin-bottom: 25px; }
+  .pxm-sideMenu .form-container {
+    padding: 1rem; }
+    .pxm-sideMenu .form-container input {
+      display: block;
+      width: 100%; }
+  .pxm-sideMenu__vertical {
+    width: 90%;
+    height: 100%;
+    top: 0;
+    z-index: 500; }
+  .pxm-sideMenu__left {
+    left: -90%; }
+    .pxm-sideMenu__left.pxm-sideMenu-open {
+      left: 0; }
+  .pxm-sideMenu__right {
+    right: -90%; }
+    .pxm-sideMenu__right.pxm-sideMenu-open {
+      right: 0; }
+
+.menu-trigger {
+  position: fixed;
+  top: 45%;
+  z-index: 480;
+  background: #393e41;
+  color: #f6f7eb;
+  padding: 0.5em;
+  border-radius: 35%; }
+  .menu-trigger.fa {
+    font-size: 2.75rem; }
+  .menu-trigger.disable {
+    color: #ef6461;
+    pointer-events: none; }
+  .menu-trigger#showVisualizationMenu {
+    left: -20px;
+    padding-left: 30px; }
+    #pxm-sideMenu-visualization.pxm-sideMenu-open + .menu-trigger#showVisualizationMenu {
+      left: calc( 90% - 20px);
+      z-index: 490; }
+  .menu-trigger#showMapsMenu {
+    right: -20px;
+    padding-right: 30px; }
+    #pxm-sideMenu-maps.pxm-sideMenu-open + .menu-trigger#showMapsMenu {
+      right: calc( 90% - 20px);
+      z-index: 490; }
+
+/*
+ * 3DCSS code from here down will only be used for 3DCSS
+ */
+svg:not(:root) {
+  overflow: visible; }
+
+[class^="D3"] {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  transition: all 500ms ease; }
+
+#D3 {
+  text-align: center; }
+  #D3 .D3bar {
+    fill: #29274c; }
+    #D3 .D3bar:nth-child(n + 11) {
+      fill: #1b998b; }
+    #D3 .D3bar:nth-child(n + 21) {
+      fill: #e78f8e; }
+
+@media only screen and (max-width: 768px) {
+  /*svg {
+		transform: scaleX(0.275);
+		transform-origin: left;
+	}*/
+  .menu-trigger {
+    top: 5%; } }
+
+@media only screen and (min-width: 320px) and (max-width: 640px) and (orientation: landscape) {
+  .barChart {
+    transform: scale(0.5);
+    transform-origin: left; } }
+
+@media only screen and (min-width: 320px) and (max-width: 640px) and (orientation: portrait) {
+  .barChart {
+    display: none; } }
+
+/*
+ * GMAPS code from here down will only be used for GMAPS 
+ */
+#map {
+  height: 100%;
+  width: 100%; }
+
