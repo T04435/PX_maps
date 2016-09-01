@@ -31,16 +31,16 @@ namespace PX_maps.Controllers
                     csvReader.SetDelimiters(new string[] { "," });
                     csvReader.HasFieldsEnclosedInQuotes = false;
                     string[] colFields = new string[9];
-
-                    colFields[0] = "deviceId~2";
+										
+                    colFields[0] = "deviceId";
                     colFields[1] = "latitude";
                     colFields[2] = "longitude";
-                    colFields[3] = "speed~1";
-                    colFields[4] = "reliability~4";
+                    colFields[3] = "speed";
+                    colFields[4] = "reliability";
                     colFields[5] = "satellite";
-                    colFields[6] = "type~4";
-                    colFields[7] = "lock~4";
-                    colFields[8] = "isoDate~9";
+                    colFields[6] = "type";
+                    colFields[7] = "lock";
+                    colFields[8] = "isoDate";
                     Regex csvrgx = new Regex(@"^\w{3,9}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,2}\,\d\.\d\,\d\,\d\,\d\,[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
                     foreach (string column in colFields)
                     {
@@ -93,7 +93,7 @@ namespace PX_maps.Controllers
                 dbConnection.Open();
                 using (SqlBulkCopy s = new SqlBulkCopy(dbConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
-                    s.DestinationTableName = "Test";
+                    s.DestinationTableName = "Data";
                     s.WriteToServer(csvFileData);
                 }
                 dbConnection.Close();

@@ -258,9 +258,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\GeoData.mdf" />
-    <Content Include="App_Data\GeoData_log.ldf">
-      <DependentUpon>GeoData.mdf</DependentUpon>
+    <Content Include="App_Data\GPSData.mdf" />
+    <Content Include="App_Data\GPSData_log.ldf">
+      <DependentUpon>GPSData.mdf</DependentUpon>
     </Content>
     <Content Include="Content\app.css" />
     <Content Include="Content\app.min.css">
@@ -348,11 +348,12 @@
     <Content Include="Views\Database\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\uploads\" />
     <Content Include="Views\Shared\_PartialMapsMenu.cshtml" />
     <Content Include="Views\Shared\_PartialVisualizationMenu.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\uploads\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
