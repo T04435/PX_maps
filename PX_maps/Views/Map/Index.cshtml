@@ -1,0 +1,78 @@
+﻿
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+    var map, heatmap, heatmapData = [];
+    function initMap() {
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 10.8231, lng: 106.6297 },
+            zoom: 13,
+            mapTypeId: 'hybrid'
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        fillBox($("#ddlSelectHour").val());
+        json();
+        $("#ddlSelectHour").change(json);
+        $("#ddlSelectDay").change(json);
+    });
+    function json() {
+        var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
+        console.log(jsonData.toString());
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("getListLatLongs")',
+            contentType: "application/json; charset=utf-8",
+            data: jsonData,
+            datatype: 'json',
+            success: function (data) {
+                heatmap = new google.maps.visualization.HeatmapLayer({
+                    map: map
+                });
+                heatmapData.length = 0;
+                heatmap.setData(heatmapData);
+                heatmap.setMap(map);
+                for (var i = 0, l = data.length; i < l; i++) {
+                    heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+                }
+                heatmap.setData(heatmapData);
+                heatmap.setMap(map);
+                console.log("Done!");
+                /*(heatmapData = [
+                    new google.maps.LatLng(10.8231, 106.6297)
+                ];*/
+                //console.log(heatmapData);
+            }
+        })
+    }
+
+    function fillBox(hour) {
+        document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+        //console.log(hour + day);
+    }
+</script>
+<form method="post">
+    <div id="floating-panel">
+        <label for="ddlSelectHour">Hour:</label>
+        <input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
+        <input type="text" disabled id="valueOfddlSelectHour" />
+        <label for="ddlSelectDay">Day:</label>
+        <select id="ddlSelectDay">
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="7">Sunday</option>
+        </select>
+        <div id="contentHolder"></div>
+    </div>
+
+</form>
+<div id="map" style="height:500px;"></div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
+</script>
