@@ -27,7 +27,7 @@ namespace PX_maps.Controllers
 
             using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
             {
-                string CommandText = "SELECT latitude,longitude FROM Test WHERE DATEPART(WEEKDAY,[isoDate~9]) = @weekday AND DATEPART(HOUR,[isoDate~9]) = @hour";
+                string CommandText = "SELECT latitude,longitude FROM Test WHERE DATENAME(WEEKDAY,[isoDate~9]) = @weekday AND DATEPART(HOUR,[isoDate~9]) = @hour";
 
                 using (SqlCommand cmd = new SqlCommand(CommandText, dbconn))
                 {

@@ -13,6 +13,19 @@
 </script>
 <script>
     $(document).ready(function () {
+        var date = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
+        var n = weekday[date.getDay()];
+
+        $("#ddlSelectHour").val(date.getHours());
+        $("#ddlSelectDay").val(n);
         fillBox($("#ddlSelectHour").val());
         json();
         $("#ddlSelectHour").change(json);
@@ -60,13 +73,13 @@
         <input type="text" disabled id="valueOfddlSelectHour" />
         <label for="ddlSelectDay">Day:</label>
         <select id="ddlSelectDay">
-            <option value="1">Monday</option>
-            <option value="2">Tuesday</option>
-            <option value="3">Wednesday</option>
-            <option value="4">Thursday</option>
-            <option value="5">Friday</option>
-            <option value="6">Saturday</option>
-            <option value="7">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
         </select>
         <div id="contentHolder"></div>
     </div>
