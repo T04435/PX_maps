@@ -20,14 +20,19 @@ namespace PX_maps.Controllers
             return View();
         }
 
-        public JsonResult getListLatLongs(string hour, string day)
+		public ActionResult SnapLanes()
+		{
+			return View();
+		}
+
+		public JsonResult getListLatLongs(string hour, string day)
         {
             SqlDataReader dr;
             List<LatLong> dbCoordinates = new List<LatLong>();
 
             using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
             {
-                string CommandText = "SELECT latitude,longitude FROM Test WHERE DATENAME(WEEKDAY,[isoDate~9]) = @weekday AND DATEPART(HOUR,[isoDate~9]) = @hour";
+                string CommandText = "SELECT latitude,longitude FROM Data WHERE DATENAME(WEEKDAY,[isoDate]) = @weekday AND DATEPART(HOUR,[isoDate]) = @hour";
 
                 using (SqlCommand cmd = new SqlCommand(CommandText, dbconn))
                 {
