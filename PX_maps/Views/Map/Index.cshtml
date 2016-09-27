@@ -1,136 +1,187 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-    var trafficPaths = [], map, heatmap, heatmapData = [];
-    function initMap() {
+	var trafficPaths = [], map, heatmap, heatmapData = [];
+	var apiKey = 'AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs';
+	function initMap() {
 
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 10.8231, lng: 106.6297 },
-            zoom: 13,
-            mapTypeId: 'hybrid'
-        });
-    }
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: { lat: 10.8231, lng: 106.6297 },
+			zoom: 12,
+			mapTypeId: 'hybrid'
+		});
+	}
 </script>
 <script>
-    $(document).ready(function () {
-        var date = new Date();
-        var weekday = new Array(7);
-        weekday[0] = "Sunday";
-        weekday[1] = "Monday";
-        weekday[2] = "Tuesday";
-        weekday[3] = "Wednesday";
-        weekday[4] = "Thursday";
-        weekday[5] = "Friday";
-        weekday[6] = "Saturday";
-        var n = weekday[date.getDay()];
+	$(document).ready(function () {
+		var date = new Date();
+		var weekday = new Array(7);
+		weekday[0] = "Sunday";
+		weekday[1] = "Monday";
+		weekday[2] = "Tuesday";
+		weekday[3] = "Wednesday";
+		weekday[4] = "Thursday";
+		weekday[5] = "Friday";
+		weekday[6] = "Saturday";
+		var n = weekday[date.getDay()];
 
-        $("#ddlSelectHour").val(date.getHours());
-        $("#ddlSelectDay").val(n);
-        fillBox($("#ddlSelectHour").val());
-        json();
-        $("#ddlSelectHour").change(json);
-        $("#ddlSelectDay").change(json);
-    });
-    function json() {
-        var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
-        console.log(jsonData.toString());
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("getListLatLongs")',
-            contentType: "application/json; charset=utf-8",
-            data: jsonData,
-            datatype: 'json',
-            success: function (data) {
+		$("#ddlSelectHour").val(date.getHours());
+		$("#ddlSelectDay").val(n);
+		fillBox($("#ddlSelectHour").val());
+		json();
+		$("#ddlSelectHour").change(json);
+		$("#ddlSelectDay").change(json);
+	});
+	function json() {
+		var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
+		console.log(jsonData.toString());
+		$.ajax({
+			type: 'POST',
+			url: '@Url.Action("getListLatLongs")',
+			contentType: "application/json; charset=utf-8",
+			data: jsonData,
+			datatype: 'json',
+			success: function (data) {
 
-                //this clears the polylines
-                for (var i = 0; i < trafficPaths.length; i++) {
-                    trafficPaths[i].setMap(null);
-                }
-                trafficPaths = [];
-                var countDeviceID = 4367;
-                var Colors = [
-                    "#00ff00", // lime 30
-                    "#99ff66", // yellow - green 25
-                    "#ffff00", // yellow 20
-                    "#ff6600", // orange 15
-                    "#ff0000", //red 10 //black for testing
-                    "#800000" //maroon 5
+				//this clears the polylines
+				for (var i = 0; i < trafficPaths.length; i++) {
+					trafficPaths[i].setMap(null);
+				}
+				trafficPaths = [];
+				var countDeviceID = 4367;
+				var Colors = [
+						"#20BF55", // lime 30
+						"#97CC04", // yellow - green 25
+						"#EEB902", // yellow 20
+						"#FE7F2D", // orange 15
+						"#D33B1D", //red 10 //black for testing
+						"#800000" //maroon 5
 
-                ];
+				];
 
-                //loop through each device and draw each part, change the colour based on the speed
-                for (var j = 0; j < countDeviceID; j++) {
-                    var deviceID = data[j].deviceID;
-                    heatmapData = [];
-                    for (var i = 0, l = data.length; i < l; i++) {
-                        if (data[i].deviceID == deviceID) {
-                            heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
-                        }
-                    }
-                    for (var i = 0; i < heatmapData.length - 1; i++) {
-                        //if (data[i].speed > 0) {
-                        var colour;
-                        if (data[i].speed <= 5) {
-                            colour = Colors[5];
-                        } else if (data[i].speed <= 10) {
-                            colour = Colors[4];
-                        } else if (data[i].speed <= 20) {
-                            colour = Colors[3];
-                        } else if (data[i].speed <= 30) {
-                            colour = Colors[2];
-                        } else if (data[i].speed <= 45) {
-                            colour = Colors[1];
-                        } else {
-                            colour = Colors[0];
-                        }
-                        //sets up polylines and draws them
-                        var PathStyle = new google.maps.Polyline({
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2,
-                            map: map
-                        });
-                        PathStyle.setOptions({ strokeColor: colour });
-                        PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
-                        PathStyle.setMap(map);
-                        trafficPaths.push(PathStyle);
-                        //}
-                    }
-                }
+				//loop through each device and draw each part, change the colour based on the speed
+				for (var j = 0; j < countDeviceID; j++) {
+					var deviceID = data[j].deviceID;
+					heatmapData = [];
+					for (var i = 0, l = data.length; i < l; i++) {
+						if (data[i].deviceID == deviceID) {
+							heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+						}
+					}
+					/**
+					Here before placing the paths, we could send the data to snapRoad and then get the reponse to be shown in the map
 
-                console.log("Done!");
-                /*(heatmapData = [
-                    new google.maps.LatLng(10.8231, 106.6297)
-                ];*/
-                //console.log(heatmapData);
-            }
-        })
-    }
+					*/
 
-    function fillBox(hour) {
-        document.getElementById("valueOfddlSelectHour").value = hour + ":00";
-        //console.log(hour + day);
-    }
+
+					for (var i = 0; i < heatmapData.length - 1; i++) {
+
+						var colour;
+						if (data[i].speed <= 5) {
+							colour = Colors[5];
+						} else if (data[i].speed <= 10) {
+							colour = Colors[4];
+						} else if (data[i].speed <= 20) {
+							colour = Colors[3];
+						} else if (data[i].speed <= 30) {
+							colour = Colors[2];
+						} else if (data[i].speed <= 45) {
+							colour = Colors[1];
+						} else {
+							colour = Colors[0];
+						}
+						//sets up polylines and draws them
+						var PathStyle = new google.maps.Polyline({
+							strokeOpacity: 1.0,
+							strokeWeight: 1,
+							map: map
+						});
+						PathStyle.setOptions({ strokeColor: colour });
+						PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
+						PathStyle.setMap(map);
+						trafficPaths.push(PathStyle);
+						runSnapToRoad(PathStyle);
+						//}
+					}
+				}
+
+				console.log("Done!");
+				/*(heatmapData = [
+						new google.maps.LatLng(10.8231, 106.6297)
+				];*/
+				//console.log(heatmapData);
+			}
+		})
+	}
+
+	function fillBox(hour) {
+		document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+		//console.log(hour + day);
+	}
+	// Snap a user-created polyline to roads and draw the snapped path
+	function runSnapToRoad(path) {
+		var pathValues = [];
+		for (var i = 0; i < path.getLength() ; i++) {
+			pathValues.push(path.getAt(i).toUrlValue());
+		}
+
+		$.get('https://roads.googleapis.com/v1/snapToRoads', {
+			interpolate: true,
+			key: apiKey,
+			path: pathValues.join('|')
+		}, function (data) {
+			processSnapToRoadResponse(data);
+			drawSnappedPolyline();
+			getAndDrawSpeedLimits();
+		});
+	}
+
+	// Store snapped polyline returned by the snap-to-road service.
+	function processSnapToRoadResponse(data) {
+		snappedCoordinates = [];
+		placeIdArray = [];
+		for (var i = 0; i < data.snappedPoints.length; i++) {
+			var latlng = new google.maps.LatLng(
+					data.snappedPoints[i].location.latitude,
+					data.snappedPoints[i].location.longitude);
+			snappedCoordinates.push(latlng);
+			placeIdArray.push(data.snappedPoints[i].placeId);
+		}
+	}
+
+	// Draws the snapped polyline (after processing snap-to-road response).
+	function drawSnappedPolyline() {
+		var snappedPolyline = new google.maps.Polyline({
+			path: snappedCoordinates,
+			strokeColor: 'black',
+			strokeWeight: 3
+		});
+
+		snappedPolyline.setMap(map);
+		polylines.push(snappedPolyline);
+	}
+
 </script>
 <form method="post">
-    <div id="floating-panel">
-        <label for="ddlSelectHour">Hour:</label>
-        <input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
-        <input type="text" disabled id="valueOfddlSelectHour" />
-        <label for="ddlSelectDay">Day:</label>
-        <select id="ddlSelectDay">
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-        <div id="contentHolder"></div>
-    </div>
+	<div id="floating-panel">
+		<label for="ddlSelectHour">Hour:</label>
+		<input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
+		<input type="text" disabled id="valueOfddlSelectHour" />
+		<label for="ddlSelectDay">Day:</label>
+		<select id="ddlSelectDay">
+			<option value="Monday">Monday</option>
+			<option value="Tuesday">Tuesday</option>
+			<option value="Wednesday">Wednesday</option>
+			<option value="Thursday">Thursday</option>
+			<option value="Friday">Friday</option>
+			<option value="Saturday">Saturday</option>
+			<option value="Sunday">Sunday</option>
+		</select>
+		<div id="contentHolder"></div>
+	</div>
 
 </form>
 <div id="map" style="height:500px;"></div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
 </script>
