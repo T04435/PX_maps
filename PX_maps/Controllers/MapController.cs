@@ -27,7 +27,7 @@ namespace PX_maps.Controllers
 
             using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
             {
-                string CommandText = "SELECT [deviceId~2],latitude,longitude,[speed~1] FROM Test WHERE DATENAME(WEEKDAY,[isoDate~9]) = @weekday AND DATEPART(HOUR,[isoDate~9]) = @hour ORDER BY [deviceId~2], [isoDate~9]";
+                string CommandText = "SELECT [deviceId],latitude,longitude,[speed] FROM Data WHERE DATENAME(WEEKDAY,[isoDate]) = @weekday AND DATEPART(HOUR,[isoDate]) = @hour AND speed > 0 ORDER BY [deviceId], [isoDate]";
 
                 using (SqlCommand cmd = new SqlCommand(CommandText, dbconn))
                 {
@@ -41,8 +41,8 @@ namespace PX_maps.Controllers
                         {
                             dbCoordinates.Add(new LatLong
                             {
-                                deviceID = dr["deviceId~2"].ToString(),
-                                speed = Decimal.Parse(dr["speed~1"].ToString()),
+                                deviceID = dr["deviceId"].ToString(),
+                                speed = Decimal.Parse(dr["speed"].ToString()),
                                 latitude = Decimal.Parse(dr["latitude"].ToString()),
                                 longitude = Decimal.Parse(dr["longitude"].ToString())
                             });

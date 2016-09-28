@@ -1,136 +1,172 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-    var trafficPaths = [], map, heatmap, heatmapData = [];
-    function initMap() {
+	var trafficPaths = [], map, coordPoints = [];
+	function initMap() {
 
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 10.8231, lng: 106.6297 },
-            zoom: 13,
-            mapTypeId: 'hybrid'
-        });
-    }
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: { lat: 10.8231, lng: 106.6297 },
+			zoom: 13,
+			mapTypeId: 'hybrid'
+		});
+	}
 </script>
 <script>
-    $(document).ready(function () {
-        var date = new Date();
-        var weekday = new Array(7);
-        weekday[0] = "Sunday";
-        weekday[1] = "Monday";
-        weekday[2] = "Tuesday";
-        weekday[3] = "Wednesday";
-        weekday[4] = "Thursday";
-        weekday[5] = "Friday";
-        weekday[6] = "Saturday";
-        var n = weekday[date.getDay()];
+	$(document).ready(function () {
+		var date = new Date();
+		var weekday = new Array(7);
+		weekday[0] = "Sunday";
+		weekday[1] = "Monday";
+		weekday[2] = "Tuesday";
+		weekday[3] = "Wednesday";
+		weekday[4] = "Thursday";
+		weekday[5] = "Friday";
+		weekday[6] = "Saturday";
+		var n = weekday[date.getDay()];
 
-        $("#ddlSelectHour").val(date.getHours());
-        $("#ddlSelectDay").val(n);
-        fillBox($("#ddlSelectHour").val());
-        json();
-        $("#ddlSelectHour").change(json);
-        $("#ddlSelectDay").change(json);
-    });
-    function json() {
-        var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
-        console.log(jsonData.toString());
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("getListLatLongs")',
-            contentType: "application/json; charset=utf-8",
-            data: jsonData,
-            datatype: 'json',
-            success: function (data) {
+		$("#ddlSelectHour").val(date.getHours());
+		$("#ddlSelectDay").val(n);
+		fillBox($("#ddlSelectHour").val());
+		json();
+		// Uncoment the two lines bellow to get map updated right after changing the hour OR day
+		//$("#ddlSelectHour").change(json);
+		//$("#ddlSelectDay").change(json);
+	});
+	function json() {
+		var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
+		console.log(jsonData.toString());
+		$.ajax({
+			type: 'POST',
+			url: '@Url.Action("getListLatLongs")',
+			contentType: "application/json; charset=utf-8",
+			data: jsonData,
+			datatype: 'json',
+			success: function (data) {
 
-                //this clears the polylines
-                for (var i = 0; i < trafficPaths.length; i++) {
-                    trafficPaths[i].setMap(null);
-                }
-                trafficPaths = [];
-                var countDeviceID = 4367;
-                var Colors = [
-                    "#00ff00", // lime 30
-                    "#99ff66", // yellow - green 25
-                    "#ffff00", // yellow 20
-                    "#ff6600", // orange 15
-                    "#ff0000", //red 10 //black for testing
-                    "#800000" //maroon 5
+				//this clears the polylines
+				for (var i = 0; i < trafficPaths.length; i++) {
+					trafficPaths[i].setMap(null);
+				}
+				trafficPaths = [];
 
-                ];
+				/**
+				 * Counting the unique devices in the 'data' from the AJAX query
+				 * 'countDeviceID' will contain the unique IDs 'console.log(countDeviceID[0])' prints  "43C04062" corresponding ID value.
+				 * 'countDeviceID.length' will store the unique No. of IDs
+				 */
+				var countDeviceID = [], prevID;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].deviceID !== prevID) {
+						countDeviceID.push(data[i].deviceID);
+					}
+					prevID = data[i].deviceID;
+				}
 
-                //loop through each device and draw each part, change the colour based on the speed
-                for (var j = 0; j < countDeviceID; j++) {
-                    var deviceID = data[j].deviceID;
-                    heatmapData = [];
-                    for (var i = 0, l = data.length; i < l; i++) {
-                        if (data[i].deviceID == deviceID) {
-                            heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
-                        }
-                    }
-                    for (var i = 0; i < heatmapData.length - 1; i++) {
-                        //if (data[i].speed > 0) {
-                        var colour;
-                        if (data[i].speed <= 5) {
-                            colour = Colors[5];
-                        } else if (data[i].speed <= 10) {
-                            colour = Colors[4];
-                        } else if (data[i].speed <= 20) {
-                            colour = Colors[3];
-                        } else if (data[i].speed <= 30) {
-                            colour = Colors[2];
-                        } else if (data[i].speed <= 45) {
-                            colour = Colors[1];
-                        } else {
-                            colour = Colors[0];
-                        }
-                        //sets up polylines and draws them
-                        var PathStyle = new google.maps.Polyline({
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2,
-                            map: map
-                        });
-                        PathStyle.setOptions({ strokeColor: colour });
-                        PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
-                        PathStyle.setMap(map);
-                        trafficPaths.push(PathStyle);
-                        //}
-                    }
-                }
+				var Colors = [
+						"#88E39E", // LIGHT GREEN
+						"#7FB069", // GREEN
+						"#F9E793", // LIGHT YELLOW
+						"#F9DC5C", // YELLOW
+						"#EF6461", // LIGHT RED
+						"#630A08"  // RED
 
-                console.log("Done!");
-                /*(heatmapData = [
-                    new google.maps.LatLng(10.8231, 106.6297)
-                ];*/
-                //console.log(heatmapData);
-            }
-        })
-    }
+				];
 
-    function fillBox(hour) {
-        document.getElementById("valueOfddlSelectHour").value = hour + ":00";
-        //console.log(hour + day);
-    }
+
+				// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
+				var ActualDevice = 0;
+				//loop through each device and draw each part, change the colour based on the speed
+				for (var j = 0; j < countDeviceID.length; j++) {
+					coordPoints = [];
+
+					for (var i = ActualDevice, l = data.length; i < l; i++) {
+						// if deviceID is the same in add values to coordPoints
+						if (data[i].deviceID == countDeviceID[j]) {
+							coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+						}
+							// else update actualPosition and exit the loop
+						else {
+							ActualDevice = i;
+							break;
+						}
+					}
+					for (var i = 0; i < coordPoints.length - 1; i++) {
+						var colour;
+						var actualSpeed = data[i].speed;
+						if (data[i].speed <= 10) {
+							colour = Colors[5];
+						} else if (data[i].speed <= 15) {
+							colour = Colors[4];
+						} else if (data[i].speed <= 20) {
+							colour = Colors[3];
+						} else if (data[i].speed <= 30) {
+							colour = Colors[2];
+						} else if (data[i].speed <= 45) {
+							colour = Colors[1];
+						} else {
+							colour = Colors[0];
+						}
+						//sets up polylines and draws them
+						var PathStyle = new google.maps.Polyline({
+							txt: actualSpeed,
+							strokeOpacity: 0.85,
+							strokeWeight: 2,
+							strokeColor: colour,
+							clickable: true,
+							path: [coordPoints[i], coordPoints[i + 1]],
+							map: map
+						});
+
+						//PathStyle.setPath();
+
+						// speedTip = will load the speed value for each section for each device.
+						var speedTip = new google.maps.InfoWindow();
+						//Once the user click on the path the tooltip will pop with the speed value.
+						// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+						PathStyle.addListener('mouseover', function (e) {
+							speedTip.setPosition(e.latLng);
+							speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
+							speedTip.open(map);
+						});
+
+
+						trafficPaths.push(PathStyle);
+
+					}
+				}
+
+				console.log("Done!");
+			}
+		})
+	}
+
+	function fillBox(hour) {
+		document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+		//console.log(hour + day);
+	}
 </script>
 <form method="post">
-    <div id="floating-panel">
-        <label for="ddlSelectHour">Hour:</label>
-        <input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
-        <input type="text" disabled id="valueOfddlSelectHour" />
-        <label for="ddlSelectDay">Day:</label>
-        <select id="ddlSelectDay">
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-        <div id="contentHolder"></div>
-    </div>
+	<div id="floating-panel">
+		<label for="ddlSelectHour">Hour:</label>
+		<input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
+		<input type="text" disabled id="valueOfddlSelectHour" />
+		<label for="ddlSelectDay">Day:</label>
+		<select id="ddlSelectDay">
+			<option value="Monday">Monday</option>
+			<option value="Tuesday">Tuesday</option>
+			<option value="Wednesday">Wednesday</option>
+			<option value="Thursday">Thursday</option>
+			<option value="Friday">Friday</option>
+			<option value="Saturday">Saturday</option>
+			<option value="Sunday">Sunday</option>
+		</select>
+		<input type="button" name="update" id="refreshMap" value="Update" onclick="json()" />
+		<div id="contentHolder">
+		</div>
+	</div>
 
 </form>
 <div id="map" style="height:500px;"></div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
 </script>
