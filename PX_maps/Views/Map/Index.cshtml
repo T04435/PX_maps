@@ -104,6 +104,45 @@
 						//}
 					}
 				}
+                ];
+                for (var j = 0; j < countDeviceID; j++) {
+                    var deviceID = data[j].deviceID;
+                    heatmapData = [];
+                    console.log(deviceID);
+                    for (var i = 0, l = data.length; i < l; i++) {
+                        if (data[i].deviceID == deviceID) {
+                            heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+                        }
+                    }
+                    for (var i = 0; i < heatmapData.length - 1; i++) {
+                        //if (data[i].speed > 0) {
+                            var colour;
+                            if (data[i].speed <= 5) {
+                                colour = Colors[5];
+                            } else if (data[i].speed <= 10) {
+                                colour = Colors[4];
+                            } else if (data[i].speed <= 20) {
+                                colour = Colors[3];
+                            } else if (data[i].speed <= 30) {
+                                colour = Colors[2];
+                            } else if (data[i].speed <= 45) {
+                                colour = Colors[1];
+                            } else {
+                                colour = Colors[0];
+                            }
+
+                            var PathStyle = new google.maps.Polyline({
+                                strokeOpacity: 1.0,
+                                strokeWeight: 2,
+                                map: map
+                            });
+                            PathStyle.setOptions({ strokeColor: colour });
+                            PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
+                            PathStyle.setMap(map);
+                            trafficPaths.push(PathStyle);
+                        //}
+                    }
+                }
 
 				console.log("Done!");
 				/*(heatmapData = [
@@ -114,53 +153,10 @@
 		})
 	}
 
-	function fillBox(hour) {
-		document.getElementById("valueOfddlSelectHour").value = hour + ":00";
-		//console.log(hour + day);
-	}
-	// Snap a user-created polyline to roads and draw the snapped path
-	function runSnapToRoad(path) {
-		var pathValues = [];
-		for (var i = 0; i < path.getLength() ; i++) {
-			pathValues.push(path.getAt(i).toUrlValue());
-		}
-
-		$.get('https://roads.googleapis.com/v1/snapToRoads', {
-			interpolate: true,
-			key: apiKey,
-			path: pathValues.join('|')
-		}, function (data) {
-			processSnapToRoadResponse(data);
-			drawSnappedPolyline();
-			getAndDrawSpeedLimits();
-		});
-	}
-
-	// Store snapped polyline returned by the snap-to-road service.
-	function processSnapToRoadResponse(data) {
-		snappedCoordinates = [];
-		placeIdArray = [];
-		for (var i = 0; i < data.snappedPoints.length; i++) {
-			var latlng = new google.maps.LatLng(
-					data.snappedPoints[i].location.latitude,
-					data.snappedPoints[i].location.longitude);
-			snappedCoordinates.push(latlng);
-			placeIdArray.push(data.snappedPoints[i].placeId);
-		}
-	}
-
-	// Draws the snapped polyline (after processing snap-to-road response).
-	function drawSnappedPolyline() {
-		var snappedPolyline = new google.maps.Polyline({
-			path: snappedCoordinates,
-			strokeColor: 'black',
-			strokeWeight: 3
-		});
-
-		snappedPolyline.setMap(map);
-		polylines.push(snappedPolyline);
-	}
-
+    function fillBox(hour) {
+        document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+        //console.log(hour + day);
+    }
 </script>
 <form method="post">
 	<div id="floating-panel">
