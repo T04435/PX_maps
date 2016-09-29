@@ -379,14 +379,15 @@
 					}
 					prevID = data[i].deviceID;
 				}
-
+				console.log(countDeviceID.length);
 				var Colors = [
 						"#88E39E", // LIGHT GREEN
 						"#7FB069", // GREEN
 						"#F9E793", // LIGHT YELLOW
 						"#F9DC5C", // YELLOW
 						"#EF6461", // LIGHT RED
-						"#630A08"  // RED
+						"#630A08",  // RED
+					  "#EC0868" // ZERO
 
 				];
 
@@ -442,7 +443,7 @@
 						var speedTip = new google.maps.InfoWindow();
 						//Once the user click on the path the tooltip will pop with the speed value.
 						// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-						PathStyle.addListener('click', function (e) {
+						PathStyle.addListener('mouseover', function (e) {
 							speedTip.setPosition(e.latLng);
 							speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
 							speedTip.open(map);
