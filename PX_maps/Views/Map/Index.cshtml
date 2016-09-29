@@ -1,14 +1,331 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-	var trafficPaths = [], map, heatmap, heatmapData = [];
-	var apiKey = 'AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs';
+	var trafficPaths = [], map, coordPoints = [];
 	function initMap() {
 
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: { lat: 10.8231, lng: 106.6297 },
-			zoom: 12,
-			mapTypeId: 'hybrid'
+			zoom: 13,
+			disableDefaultUI: true,
+			styles: [
+  {
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#242f3e"
+      }
+  	]
+  },
+  {
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      }
+  	]
+  },
+  {
+  	"elementType": "labels.text.stroke",
+  	"stylers": [
+      {
+      	"color": "#383838"
+      }
+  	]
+  },
+  {
+  	"featureType": "administrative.locality",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      },
+      {
+      	"visibility": "on"
+      }
+  	]
+  },
+  {
+  	"featureType": "administrative.neighborhood",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "landscape",
+  	"stylers": [
+      {
+      	"color": "#EFEFEF"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#263c3f"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#38414e"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#212a37"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      },
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.arterial",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#1f2835"
+      },
+      {
+      	"weight": 1
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "on"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      },
+      {
+      	"weight": 1
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry.fill",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      },
+      {
+      	"weight": 5
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#1f2835"
+      },
+      {
+      	"weight": 2
+      }
+  	]
+  },
+  {
+  	"featureType": "road.local",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#2f3948"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station.airport",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "simplified"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station.bus",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "simplified"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#9DD1F1"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#F37F27"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text.stroke",
+  	"stylers": [
+      {
+      	"color": "#383838"
+      }
+  	]
+  }
+			]
 		});
 	}
 </script>
@@ -29,8 +346,9 @@
 		$("#ddlSelectDay").val(n);
 		fillBox($("#ddlSelectHour").val());
 		json();
-		$("#ddlSelectHour").change(json);
-		$("#ddlSelectDay").change(json);
+		// Uncoment the two lines bellow to get map updated right after changing the hour OR day
+		//$("#ddlSelectHour").change(json);
+		//$("#ddlSelectDay").change(json);
 	});
 	function json() {
 		var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
@@ -48,38 +366,55 @@
 					trafficPaths[i].setMap(null);
 				}
 				trafficPaths = [];
-				var countDeviceID = 4367;
+
+				/**
+				 * Counting the unique devices in the 'data' from the AJAX query
+				 * 'countDeviceID' will contain the unique IDs 'console.log(countDeviceID[0])' prints  "43C04062" corresponding ID value.
+				 * 'countDeviceID.length' will store the unique No. of IDs
+				 */
+				var countDeviceID = [], prevID;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].deviceID !== prevID) {
+						countDeviceID.push(data[i].deviceID);
+					}
+					prevID = data[i].deviceID;
+				}
+				console.log(countDeviceID.length);
 				var Colors = [
-						"#20BF55", // lime 30
-						"#97CC04", // yellow - green 25
-						"#EEB902", // yellow 20
-						"#FE7F2D", // orange 15
-						"#D33B1D", //red 10 //black for testing
-						"#800000" //maroon 5
+						"#88E39E", // LIGHT GREEN
+						"#7FB069", // GREEN
+						"#F9E793", // LIGHT YELLOW
+						"#F9DC5C", // YELLOW
+						"#EF6461", // LIGHT RED
+						"#630A08",  // RED
+					  "#EC0868" // ZERO
 
 				];
 
+
+				// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
+				var ActualDevice = 0;
 				//loop through each device and draw each part, change the colour based on the speed
-				for (var j = 0; j < countDeviceID; j++) {
-					var deviceID = data[j].deviceID;
-					heatmapData = [];
-					for (var i = 0, l = data.length; i < l; i++) {
-						if (data[i].deviceID == deviceID) {
-							heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+				for (var j = 0; j < countDeviceID.length; j++) {
+					coordPoints = [];
+
+					for (var i = ActualDevice; i < data.length; i++) {
+						// if deviceID is the same in add values to coordPoints
+						if (data[i].deviceID == countDeviceID[j]) {
+							coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+						}
+							// else update actualPosition and exit the loop
+						else {
+							ActualDevice = i;
+							break;
 						}
 					}
-					/**
-					Here before placing the paths, we could send the data to snapRoad and then get the reponse to be shown in the map
-
-					*/
-
-
-					for (var i = 0; i < heatmapData.length - 1; i++) {
-
+					for (var i = 0; i < coordPoints.length - 1; i++) {
 						var colour;
-						if (data[i].speed <= 5) {
+						var actualSpeed = data[i].speed;
+						if (data[i].speed <= 10) {
 							colour = Colors[5];
-						} else if (data[i].speed <= 10) {
+						} else if (data[i].speed <= 15) {
 							colour = Colors[4];
 						} else if (data[i].speed <= 20) {
 							colour = Colors[3];
@@ -90,73 +425,45 @@
 						} else {
 							colour = Colors[0];
 						}
+
 						//sets up polylines and draws them
 						var PathStyle = new google.maps.Polyline({
-							strokeOpacity: 1.0,
-							strokeWeight: 1,
+							txt: actualSpeed,
+							strokeOpacity: 0.85,
+							strokeWeight: 2,
+							strokeColor: colour,
+							clickable: true,
+							path: [coordPoints[i], coordPoints[i + 1]],
 							map: map
 						});
-						PathStyle.setOptions({ strokeColor: colour });
-						PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
-						PathStyle.setMap(map);
+
+						//PathStyle.setPath();
+
+						// speedTip = will load the speed value for each section for each device.
+						var speedTip = new google.maps.InfoWindow();
+						//Once the user click on the path the tooltip will pop with the speed value.
+						// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+						PathStyle.addListener('mouseover', function (e) {
+							speedTip.setPosition(e.latLng);
+							speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
+							speedTip.open(map);
+						});
+
+
 						trafficPaths.push(PathStyle);
-						runSnapToRoad(PathStyle);
-						//}
+
 					}
 				}
-                ];
-                for (var j = 0; j < countDeviceID; j++) {
-                    var deviceID = data[j].deviceID;
-                    heatmapData = [];
-                    console.log(deviceID);
-                    for (var i = 0, l = data.length; i < l; i++) {
-                        if (data[i].deviceID == deviceID) {
-                            heatmapData.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
-                        }
-                    }
-                    for (var i = 0; i < heatmapData.length - 1; i++) {
-                        //if (data[i].speed > 0) {
-                            var colour;
-                            if (data[i].speed <= 5) {
-                                colour = Colors[5];
-                            } else if (data[i].speed <= 10) {
-                                colour = Colors[4];
-                            } else if (data[i].speed <= 20) {
-                                colour = Colors[3];
-                            } else if (data[i].speed <= 30) {
-                                colour = Colors[2];
-                            } else if (data[i].speed <= 45) {
-                                colour = Colors[1];
-                            } else {
-                                colour = Colors[0];
-                            }
-
-                            var PathStyle = new google.maps.Polyline({
-                                strokeOpacity: 1.0,
-                                strokeWeight: 2,
-                                map: map
-                            });
-                            PathStyle.setOptions({ strokeColor: colour });
-                            PathStyle.setPath([heatmapData[i], heatmapData[i + 1]]);
-                            PathStyle.setMap(map);
-                            trafficPaths.push(PathStyle);
-                        //}
-                    }
-                }
 
 				console.log("Done!");
-				/*(heatmapData = [
-						new google.maps.LatLng(10.8231, 106.6297)
-				];*/
-				//console.log(heatmapData);
 			}
 		})
 	}
 
-    function fillBox(hour) {
-        document.getElementById("valueOfddlSelectHour").value = hour + ":00";
-        //console.log(hour + day);
-    }
+	function fillBox(hour) {
+		document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+		//console.log(hour + day);
+	}
 </script>
 <form method="post">
 	<div id="floating-panel">
@@ -173,7 +480,9 @@
 			<option value="Saturday">Saturday</option>
 			<option value="Sunday">Sunday</option>
 		</select>
-		<div id="contentHolder"></div>
+		<input type="button" name="update" id="refreshMap" value="Update" onclick="json()" />
+		<div id="contentHolder">
+		</div>
 	</div>
 
 </form>
