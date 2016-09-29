@@ -7,7 +7,325 @@
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: { lat: 10.8231, lng: 106.6297 },
 			zoom: 13,
-			mapTypeId: 'hybrid'
+			disableDefaultUI: true,
+			styles: [
+  {
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#242f3e"
+      }
+  	]
+  },
+  {
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      }
+  	]
+  },
+  {
+  	"elementType": "labels.text.stroke",
+  	"stylers": [
+      {
+      	"color": "#242f3e"
+      }
+  	]
+  },
+  {
+  	"featureType": "administrative.locality",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#d59563"
+      },
+      {
+      	"visibility": "on"
+      }
+  	]
+  },
+  {
+  	"featureType": "administrative.neighborhood",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "landscape",
+  	"stylers": [
+      {
+      	"color": "#565554"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#263c3f"
+      }
+  	]
+  },
+  {
+  	"featureType": "poi.park",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#6b9a76"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#38414e"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#212a37"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#9ca5b3"
+      },
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.arterial",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#1f2835"
+      },
+      {
+      	"weight": 2
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "on"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#f3d19c"
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      },
+      {
+      	"weight": 1
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry.fill",
+  	"stylers": [
+      {
+      	"color": "#746855"
+      },
+      {
+      	"weight": 5
+      }
+  	]
+  },
+  {
+  	"featureType": "road.highway.controlled_access",
+  	"elementType": "geometry.stroke",
+  	"stylers": [
+      {
+      	"color": "#1f2835"
+      },
+      {
+      	"weight": 3
+      }
+  	]
+  },
+  {
+  	"featureType": "road.local",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#2f3948"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit",
+  	"elementType": "labels",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#d59563"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station.airport",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "simplified"
+      }
+  	]
+  },
+  {
+  	"featureType": "transit.station.bus",
+  	"elementType": "labels.icon",
+  	"stylers": [
+      {
+      	"visibility": "simplified"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "geometry",
+  	"stylers": [
+      {
+      	"color": "#17263c"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text",
+  	"stylers": [
+      {
+      	"visibility": "off"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text.fill",
+  	"stylers": [
+      {
+      	"color": "#515c6d"
+      }
+  	]
+  },
+  {
+  	"featureType": "water",
+  	"elementType": "labels.text.stroke",
+  	"stylers": [
+      {
+      	"color": "#17263c"
+      }
+  	]
+  }
+			]
 		});
 	}
 </script>
@@ -79,7 +397,7 @@
 				for (var j = 0; j < countDeviceID.length; j++) {
 					coordPoints = [];
 
-					for (var i = ActualDevice, l = data.length; i < l; i++) {
+					for (var i = ActualDevice; i < data.length; i++) {
 						// if deviceID is the same in add values to coordPoints
 						if (data[i].deviceID == countDeviceID[j]) {
 							coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
@@ -106,6 +424,7 @@
 						} else {
 							colour = Colors[0];
 						}
+
 						//sets up polylines and draws them
 						var PathStyle = new google.maps.Polyline({
 							txt: actualSpeed,
@@ -123,7 +442,7 @@
 						var speedTip = new google.maps.InfoWindow();
 						//Once the user click on the path the tooltip will pop with the speed value.
 						// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-						PathStyle.addListener('mouseover', function (e) {
+						PathStyle.addListener('click', function (e) {
 							speedTip.setPosition(e.latLng);
 							speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
 							speedTip.open(map);
