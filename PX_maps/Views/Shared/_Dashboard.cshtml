@@ -19,7 +19,8 @@
 				</select>
 			</div>
 			<p class="range-field">
-				<input type="range" id="hour-range" min="0" max="23" />
+				<input type="text"  disabled id="hour-range-value" placeholder="Please Select Time Bellow" value="" />
+				<input type="range" id="hour-range" min="0" max="23"  onchange="fillBox(this.value);"/>
 			</p>
 		</form>
 		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index'), json(1)"><i class="material-icons right">trending_up</i>get traffic</a>

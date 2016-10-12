@@ -342,6 +342,7 @@
 		weekday[6] = "Saturday";
 		var n = weekday[date.getDay()];
 
+		$("#hour-range").val(date.getHours());
 		$("#ddlSelectHour").val(date.getHours());
 		$("#ddlSelectDay").val(n);
 		fillBox($("#ddlSelectHour").val());
@@ -488,5 +489,5 @@
 </form>
 <div id="map" ></div>
 <script async defer
-				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTNesrMExoVPZLjVPAqnKlYECTowvdCs&libraries=visualization&callback=initMap">
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjsP0sefrRO0fFJ_cm6styahfGdJMkOBQ&libraries=visualization&callback=initMap">
 </script>

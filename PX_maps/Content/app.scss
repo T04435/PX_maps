@@ -51,6 +51,13 @@ h6 {
 	font-variant: small-caps;
 }
 
+::-webkit-input-placeholder {
+	 text-transform: uppercase; 
+	 text-align: center;
+}
+::-moz-placeholder { text-transform: uppercase; } /* firefox 19+ */
+:-ms-input-placeholder { text-transform: uppercase; } /* ie */
+input:-moz-placeholder { text-transform: uppercase; }
 
 .pxm-sideMenu {
 	position: fixed;
