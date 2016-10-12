@@ -28,10 +28,15 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+	font-size: 12px;
 }
 
 body {
 	overflow: hidden;
+}
+
+*{
+	font-family: $textFont;
 }
 
 h1,
@@ -45,6 +50,7 @@ h6 {
 	text-transform: capitalize;
 	font-variant: small-caps;
 }
+
 
 .pxm-sideMenu {
 	position: fixed;
@@ -208,9 +214,154 @@ svg:not(:root) {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 0;
+	left: 25%;
 	right: 0;
 	z-index: 0;
 	height: 100%;
+	width: 75%;
+}
+
+
+
+/*
+	DASHBOARD
+*/
+
+#dashboard {
+	z-index: 100;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0 2rem;
+	height: 100%;
+	width: 25%;
+	background-color: $black;
+
+	& .section {
+		border-bottom: 2px solid lighten($black, 35%);
+
+		& .section-title {
+			color: darken($white, 15%);
+			text-align: left;
+		}
+	}
+
+	& .title {
+		color: $white;
+		padding-top: 0;
+		margin-top: 0;
+	}
+}
+
+.full-width-btn, select {
 	width: 100%;
+	color: $white !important;
+}
+
+.week-day-select {
+	background-color: #26A69A;
+	border: none;
+	border-radius: 2px;
+	text-transform: uppercase;
+}
+
+.footer {
+	position: absolute;
+	bottom: 5px;
+}
+
+.about {
+	right: 2rem;
+}
+
+
+/* APP-CONTAINER */
+.app-container {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	bottom: 0;
+	right: 0;
+	height: 100%;
+}
+
+/* ABOUT US */
+
+.staff {
+	width: 25%;
+	margin: 3rem;
+	height: auto;
+	overflow: hidden;
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	& .staff-photo {
+		width: 100%;
+		height: auto;
+		border-radius: 50%;
+		border: 10px solid;
+		box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+	}
+
+	&#chris .staff-photo {
+		border-color: $green;
+	}
+	&#kieren .staff-photo {
+		border-color: $yellow;
+	}
+	&#fidel .staff-photo {
+		border-color: $red;
+	}
+
+	& .staff-name {
+		text-decoration: underline;
+	}
+
+	& .staff-desc {
+		text-align: center;
+		font-size: 1.25rem;
+	}
+}
+
+/* All Progress Bars */
+progress {
+	/* Reset the default appearance */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 100%;
+}
+
+/* Determinate */
+progress[value] {
+	/* Reset the default appearance */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+progress::-webkit-progress-bar {
+	background: $white;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;
+	border-radius: 2px;
+}
+
+progress::-webkit-progress-value {
+	border-radius: 2px;
+	#chris &{
+		background-color: $green;
+	}
+	#kieren &{
+		background-color: $yellow;
+	}
+	#fidel &{
+		background-color: $red;
+	}
+}
+
+
+/*	HELPERS  CLASSES  */
+.cta-text{
+	font-weight: 900;
+	color: lighten($black, 7.5%);
 }

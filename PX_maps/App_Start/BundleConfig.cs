@@ -22,18 +22,20 @@ namespace PX_maps
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
 								"~/Scripts/bootstrap.js",
 								"~/Scripts/D3_creation.js",
-								"~/Scripts/GMaps_creation.js",
+								"~/Scripts/GMaps_creation.js", 
 								"~/Scripts/respond.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 								"~/Content/bootstrap.css",
 								"~/Content/site.css",
+								"~/Content/materialize.css",
 								"~/Content/app.css",
 								"~/Content/font-awesome.min.css"));
 
 			bundles.Add(new ScriptBundle("~/Scripts/Site").Include(
 								"~/Scripts/app.js",
 								"~/Scripts/classie.js",
+								"~/Scripts/materialize.js",
 								"~/Scripts/d3.min.js"));
 			BundleTable.EnableOptimizations = false;
 		}

@@ -1,0 +1,37 @@
+﻿
+<nav id="dashboard">
+	<div class="section">
+		<h1 class="title">KFC_Maps</h1>
+	</div>
+	<div class="section">
+		<h4 class="section-title">map controls:</h4>
+		<form method="post">
+			<div class="row">
+				<select class="form-control week-day-select" id="ddlSelectDay">
+					<option value="" disabled selected>Select Day</option>
+					<option value="Monday">Monday</option>
+					<option value="Tuesday">Tuesday</option>
+					<option value="Wednesday">Wednesday</option>
+					<option value="Thursday">Thursday</option>
+					<option value="Friday">Friday</option>
+					<option value="Saturday">Saturday</option>
+					<option value="Sunday">Sunday</option>
+				</select>
+			</div>
+			<p class="range-field">
+				<input type="range" id="hour-range" min="0" max="24" />
+			</p>
+		</form>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">trending_up</i>get traffic</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">settings_brightness</i>show heatmap</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">settings_ethernet</i>show voronoi</a>
+	</div>
+	<div class="section">
+		<h4 class="section-title">Graph controls:</h4>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">view_week</i>show bar chart</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">track_changes</i>show donut graph</a>
+	</div>
+	<div class="footer copy"><h6>&copy; <a target="_blank" href="http://www.westernsydney.edu.au/">WSU</a> - <a target="_blank" href="http://staff.scem.uws.edu.au/~vinh/">Dr. Quang Vinh Nguyen</a></h6></div>
+	<div class="footer about"><h6><a runat="server" href="~/Home/About">about us</a></h6></div>
+
+</nav>

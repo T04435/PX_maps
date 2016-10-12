@@ -271,6 +271,10 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\materialize.css" />
+    <Content Include="Content\Media\chris.jpg" />
+    <Content Include="Content\Media\fidel.png" />
+    <Content Include="Content\Media\kieren.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -309,6 +313,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\materialize.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -353,6 +358,7 @@
     <Content Include="Views\Database\Index.cshtml" />
     <Content Include="Views\Map\Index.cshtml" />
     <Content Include="Views\Map\SnapLanes.cshtml" />
+    <Content Include="Views\Shared\_Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_PartialMapsMenu.cshtml" />

@@ -5,21 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - My ASP.NET Application</title>
 	<link href='https://fonts.googleapis.com/css?family=Francois+One|Titillium+Web:400,900' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.1/d3.js"></script>
+		
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-	@Html.Partial("_PartialVisualizationMenu")
-	<div class="container body-content">
+	@Html.Partial("_Dashboard")
+	<div class="app-container">
 		@RenderBody()
 	</div>
-	@Html.Partial("_PartialMapsMenu")
+	
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")
 	@Scripts.Render("~/Scripts/Site")
 	@RenderSection("scripts", required: false)
+	<!-- Compiled and minified JavaScript -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSba7qzVO1cFElj7r0jpoM-8s-P-EVWks"></script>
 </body>
 </html>
