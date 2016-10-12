@@ -19,19 +19,33 @@
 				</select>
 			</div>
 			<p class="range-field">
-				<input type="range" id="hour-range" min="0" max="24" />
+				<input type="range" id="hour-range" min="0" max="23" />
 			</p>
 		</form>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">trending_up</i>get traffic</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">settings_brightness</i>show heatmap</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">settings_ethernet</i>show voronoi</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index'), json(1)"><i class="material-icons right">trending_up</i>get traffic</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">settings_brightness</i>show heatmap</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">settings_ethernet</i>show voronoi</a>
 	</div>
 	<div class="section">
 		<h4 class="section-title">Graph controls:</h4>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">view_week</i>show bar chart</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="alert('click')"><i class="material-icons right">track_changes</i>show donut graph</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">view_week</i>show bar chart</a>
+		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">track_changes</i>show donut graph</a>
 	</div>
 	<div class="footer copy"><h6>&copy; <a target="_blank" href="http://www.westernsydney.edu.au/">WSU</a> - <a target="_blank" href="http://staff.scem.uws.edu.au/~vinh/">Dr. Quang Vinh Nguyen</a></h6></div>
 	<div class="footer about"><h6><a runat="server" href="~/Home/About">about us</a></h6></div>
 
 </nav>
+
+<script type="text/javascript">
+	const path = window.location.pathname;
+
+
+	function redirectPath(ActualPath, nextPath) {
+		if(ActualPath !== nextPath){
+			window.location = '..' + nextPath;
+		} else {
+			alert('path are the same, EXECV');
+		}
+	}
+
+</script>
