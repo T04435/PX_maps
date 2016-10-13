@@ -1,7 +1,7 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-	var trafficPaths = [], map, busyAreas = [], coordPoints = [];
+    var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService;
 	var Colors = [
 						"#88E39E", // LIGHT GREEN
 						"#7FB069", // GREEN
@@ -420,7 +420,8 @@
 
 	function drawDevicePath(data, countDeviceID) {
 		// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
-		var ActualDevice = 0;
+	    var ActualDevice = 0;
+	    var speedCounter = 0;
 		//loop through each device and draw each part, change the colour based on the speed
 		for (var j = 0; j < countDeviceID.length; j++) {
 			coordPoints = [];
@@ -428,47 +429,128 @@
 			for (var i = ActualDevice; i < data.length; i++) {
 				// if deviceID is the same in add values to coordPoints
 				if (data[i].deviceID == countDeviceID[j]) {
-					coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+				    coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+				    speed += data[i].speed;
+				    speedCounter++;
 				}
 					// else update actualPosition and exit the loop
 				else {
+				    speed = speed / speedCounter;
+				    speedCounter = 0;
 					ActualDevice = i;
 					break;
 				}
 			}
-			for (var i = 0; i < coordPoints.length - 1; i++) {
-				var colour = selectColor(data[i].speed);
-				var actualSpeed = data[i].speed;
-
-
-				//sets up polylines and draws them
-				var PathStyle = new google.maps.Polyline({
-					txt: actualSpeed,
-					strokeOpacity: 0.85,
-					strokeWeight: 2,
-					strokeColor: colour,
-					clickable: true,
-					path: [coordPoints[i], coordPoints[i + 1]],
-					map: map
-				});
-
-				//PathStyle.setPath();
-
-				// speedTip = will load the speed value for each section for each device.
-				var speedTip = new google.maps.InfoWindow();
-				//Once the user click on the path the tooltip will pop with the speed value.
-				// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-				PathStyle.addListener('mouseover', function (e) {
-					speedTip.setPosition(e.latLng);
-					speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
-					speedTip.open(map);
-				});
-
-
-				trafficPaths.push(PathStyle);
-
-			}
+			slimCoordPoints();
+			buildRequest();
+			speed = 0;
 		}
+		sendRequest();
+	}
+	function slimCoordPoints() {
+	    newCoordPoints = [];
+	    var length = 4;
+
+	    newCoordPoints.push(coordPoints[0]);
+	    if (Math.floor(coordPoints.length / 2) < 4) {
+	        length = Math.floor(coordPoints.length / 2);
+	    }
+	    for (var i = 0; i < length; i++) {
+	        newCoordPoints.push(coordPoints[i + 1]);
+	        //newCoordPoints.push(coordPoints[coordPoints.length - 1]);
+	    }
+	    for (var i = 0; i < length; i++) {
+	        //newCoordPoints.push(coordPoints[length + 1]);
+	        newCoordPoints.push(coordPoints[coordPoints.length - (1 + i)]);
+	    }
+	    newCoordPoints.push(coordPoints[coordPoints.length - 1]);
+	    coordPoints = [];
+	    coordPoints = newCoordPoints.slice();
+	}
+	function buildRequest() {
+	    directionsService = new google.maps.DirectionsService();
+	    var waypointArr = [];
+	    var start, finish, lastPnt;
+	    //console.log(coordPoints);
+	    for (var i = 0; i < coordPoints.length; i++) {
+	        if (coordPoints[i] === lastPnt) {
+	            continue;
+	        }
+
+	        lastpoint = coordPoints[i]
+	        waypointArr.push({
+	            location: coordPoints[i],
+	            stopover: true
+	        });
+	    }
+	    //console.log(waypointArr);
+	    start = (waypointArr.shift()).location;
+	    finish = waypointArr.pop().location;
+
+	    //console.log(start + finish);
+
+	    var request = {
+	        origin: start,
+	        destination: finish,
+	        waypoints: waypointArr,
+	        travelMode: google.maps.TravelMode.DRIVING,
+	        optimizeWaypoints: true
+	    }
+	    console.log(speed);
+	    requestArr.push({ "request": request, "colour": selectColor(speed) });
+	}
+	function sendRequest() {
+	    var i = 0;
+
+	    function directionRequest() {
+	        directionsService.route(requestArr[i].request, directionResults);
+	    }
+	    function directionResults(result, status) {
+	        if (status == "OK") {
+	            renderArr[i] = new google.maps.DirectionsRenderer();
+	            renderArr[i].setMap(map);
+
+	            renderArr[i].setOptions({
+	                preserveViewport: true,
+	                suppressInfoWindows: true,
+	                suppressMarkers: true,
+	                polylineOptions: {
+	                    //txt: actualSpeed,
+	                    strokeOpacity: 0.85,
+	                    strokeWeight: 2,
+	                    strokeColor: requestArr[i].colour
+	                }
+	            });
+
+	            /*
+                // speedTip = will load the speed value for each section for each device.
+                var speedTip = new google.maps.InfoWindow();
+                //Once the user click on the path the tooltip will pop with the speed value.
+                // other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+                renderArr[i].addListener('mouseover', function (e) {
+                    speedTip.setPosition(e.latLng);
+                    speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
+                    speedTip.open(map);
+                });
+                */
+	            renderArr[i].setDirections(result);
+	        }
+	        else {
+	            console.log(status);
+	            console.log(requestArr[i]);
+	        }
+	        next();
+
+	    }
+	    function next() {
+	        i++;
+	        if (i >= requestArr.length) {
+	            console.log(i);
+	            return;
+	        }
+	        setTimeout(function () { directionRequest(); }, 500);
+	    }
+	    directionRequest();
 	}
 
 
@@ -681,5 +763,5 @@
 <div id="map"></div>
 
 <script async defer
-				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjsP0sefrRO0fFJ_cm6styahfGdJMkOBQ&libraries=visualization&callback=initMap">
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGlnvoCrUPeQyx9_dRMzOuRU_VwKl92eg&libraries=visualization&callback=initMap">
 </script>
