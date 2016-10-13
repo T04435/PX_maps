@@ -28,15 +28,18 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	font-size: 12px;
+	font-size: 10px;
 }
 
 body {
 	overflow: hidden;
 }
 
-*{
+p,
+a,
+span {
 	font-family: $textFont;
+	font-size: 1.35rem;
 }
 
 h1,
@@ -51,13 +54,6 @@ h6 {
 	font-variant: small-caps;
 }
 
-::-webkit-input-placeholder {
-	 text-transform: uppercase; 
-	 text-align: center;
-}
-::-moz-placeholder { text-transform: uppercase; } /* firefox 19+ */
-:-ms-input-placeholder { text-transform: uppercase; } /* ie */
-input:-moz-placeholder { text-transform: uppercase; }
 
 .pxm-sideMenu {
 	position: fixed;
@@ -221,11 +217,11 @@ svg:not(:root) {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 25%;
+	left: 0;
 	right: 0;
 	z-index: 0;
 	height: 100%;
-	width: 75%;
+	width: 100%;
 }
 
 
@@ -290,6 +286,7 @@ svg:not(:root) {
 	bottom: 0;
 	right: 0;
 	height: 100%;
+	width: 75%;
 }
 
 /* ABOUT US */
@@ -302,6 +299,7 @@ svg:not(:root) {
 	position: relative;
 	display: inline-block;
 	vertical-align: top;
+
 	& .staff-photo {
 		width: 100%;
 		height: auto;
@@ -313,9 +311,11 @@ svg:not(:root) {
 	&#chris .staff-photo {
 		border-color: $green;
 	}
+
 	&#kieren .staff-photo {
 		border-color: $yellow;
 	}
+
 	&#fidel .staff-photo {
 		border-color: $red;
 	}
@@ -326,8 +326,43 @@ svg:not(:root) {
 
 	& .staff-desc {
 		text-align: center;
-		font-size: 1.25rem;
 	}
+}
+
+input#hour-range-value {
+	color: white;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 900;
+	letter-spacing: 2px;
+}
+
+::-webkit-input-placeholder {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 100;
+}
+
+::-moz-placeholder {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 100;
+}
+/* firefox 19+ */
+:-ms-input-placeholder {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 100;
+}
+/* ie */
+input:-moz-placeholder {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 100;
 }
 
 /* All Progress Bars */
@@ -355,20 +390,23 @@ progress::-webkit-progress-bar {
 
 progress::-webkit-progress-value {
 	border-radius: 2px;
-	#chris &{
+
+	#chris & {
 		background-color: $green;
 	}
-	#kieren &{
+
+	#kieren & {
 		background-color: $yellow;
 	}
-	#fidel &{
+
+	#fidel & {
 		background-color: $red;
 	}
 }
 
 
 /*	HELPERS  CLASSES  */
-.cta-text{
+.cta-text {
 	font-weight: 900;
 	color: lighten($black, 7.5%);
 }

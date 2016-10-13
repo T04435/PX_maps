@@ -11,13 +11,16 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 12px; }
+  font-size: 10px; }
 
 body {
   overflow: hidden; }
 
-* {
-  font-family: "Titillium Web", sans-serif; }
+p,
+a,
+span {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 1.35rem; }
 
 h1,
 h2,
@@ -29,21 +32,6 @@ h6 {
   text-align: center;
   text-transform: capitalize;
   font-variant: small-caps; }
-
-::-webkit-input-placeholder {
-  text-transform: uppercase;
-  text-align: center; }
-
-::-moz-placeholder {
-  text-transform: uppercase; }
-
-/* firefox 19+ */
-:-ms-input-placeholder {
-  text-transform: uppercase; }
-
-/* ie */
-input:-moz-placeholder {
-  text-transform: uppercase; }
 
 .pxm-sideMenu {
   position: fixed;
@@ -152,11 +140,11 @@ svg:not(:root) {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 25%;
+  left: 0;
   right: 0;
   z-index: 0;
   height: 100%;
-  width: 75%; }
+  width: 100%; }
 
 /*
 	DASHBOARD
@@ -204,7 +192,8 @@ svg:not(:root) {
   left: 25%;
   bottom: 0;
   right: 0;
-  height: 100%; }
+  height: 100%;
+  width: 75%; }
 
 /* ABOUT US */
 .staff {
@@ -230,8 +219,40 @@ svg:not(:root) {
   .staff .staff-name {
     text-decoration: underline; }
   .staff .staff-desc {
-    text-align: center;
-    font-size: 1.25rem; }
+    text-align: center; }
+
+input#hour-range-value {
+  color: white;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px; }
+
+::-webkit-input-placeholder {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 100; }
+
+::-moz-placeholder {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 100; }
+
+/* firefox 19+ */
+:-ms-input-placeholder {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 100; }
+
+/* ie */
+input:-moz-placeholder {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 100; }
 
 /* All Progress Bars */
 progress {

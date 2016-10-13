@@ -1,12 +1,22 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-	var trafficPaths = [], map, coordPoints = [];
+	var trafficPaths = [], map, busyAreas = [], coordPoints = [];
+	var Colors = [
+						"#88E39E", // LIGHT GREEN
+						"#7FB069", // GREEN
+						"#F9E793", // LIGHT YELLOW
+						"#F9DC5C", // YELLOW
+						"#EF6461", // LIGHT RED
+						"#630A08",  // RED
+					  "#EC0868" // ZERO
+
+	];
 	function initMap() {
 
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: { lat: 10.8231, lng: 106.6297 },
-			zoom: 13,
+			zoom: 10,
 			disableDefaultUI: true,
 			styles: [
   {
@@ -343,16 +353,13 @@
 		var n = weekday[date.getDay()];
 
 		$("#hour-range").val(date.getHours());
-		$("#ddlSelectHour").val(date.getHours());
-		$("#ddlSelectDay").val(n);
-		fillBox($("#ddlSelectHour").val());
-		json();
-		// Uncoment the two lines bellow to get map updated right after changing the hour OR day
-		//$("#ddlSelectHour").change(json);
-		//$("#ddlSelectDay").change(json);
+		$("#week-day").val(n);
+		//fillBox($("#hour-range-value").val());
+		//json(3);
+		
 	});
-	function json() {
-		var jsonData = JSON.stringify({ hour: $("#ddlSelectHour").val(), day: $("#ddlSelectDay").val() })
+	function json(option) {
+		var jsonData = JSON.stringify({ hour: $("#hour-range").val(), day: $("#week-day").val() })
 		console.log(jsonData.toString());
 		$.ajax({
 			type: 'POST',
@@ -362,132 +369,317 @@
 			datatype: 'json',
 			success: function (data) {
 
-				//this clears the polylines
-				for (var i = 0; i < trafficPaths.length; i++) {
-					trafficPaths[i].setMap(null);
-				}
-				trafficPaths = [];
+				clearMap();
 
-				/**
-				 * Counting the unique devices in the 'data' from the AJAX query
-				 * 'countDeviceID' will contain the unique IDs 'console.log(countDeviceID[0])' prints  "43C04062" corresponding ID value.
-				 * 'countDeviceID.length' will store the unique No. of IDs
-				 */
-				var countDeviceID = [], prevID;
-				for (var i = 0; i < data.length; i++) {
-					if (data[i].deviceID !== prevID) {
-						countDeviceID.push(data[i].deviceID);
-					}
-					prevID = data[i].deviceID;
-				}
+				var countDeviceID = deviceCounter(data);
+
 				console.log(countDeviceID.length);
-				var Colors = [
-						"#88E39E", // LIGHT GREEN
-						"#7FB069", // GREEN
-						"#F9E793", // LIGHT YELLOW
-						"#F9DC5C", // YELLOW
-						"#EF6461", // LIGHT RED
-						"#630A08",  // RED
-					  "#EC0868" // ZERO
-
-				];
 
 
-				// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
-				var ActualDevice = 0;
-				//loop through each device and draw each part, change the colour based on the speed
-				for (var j = 0; j < countDeviceID.length; j++) {
-					coordPoints = [];
+				switch (option) {
+					case 1:
+						console.log("OPTION 1");
+						drawDevicePath(data, countDeviceID);
+						console.log("Done!");
+						break;
+					case 2:
+						console.log("OPTION 2");
+						drawDevicePath(data, countDeviceID);
+						getSectors(data, 1);
+						break;
+					case 3:
+						console.log("OPTION 3");
+						//create the geoJson from the data
+						var textData = '{\n'+
+							'"type": "FeatureCollection",\n'+
+							'"features": [\n';
 
-					for (var i = ActualDevice; i < data.length; i++) {
-						// if deviceID is the same in add values to coordPoints
-						if (data[i].deviceID == countDeviceID[j]) {
-							coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+						var id = 0;
+						var lastID;
+						while (id < data.length) {
+							if (data[id].deviceID !== lastID) {
+								textData += '{ "type": "Feature", "id":' +  id +', "properties": { }, "geometry": { "type": "Point", "coordinates": [' + data[id].latitude + ',' + data[id].longitude + '] } },\n';
+							}
+							lastID = data[id].deviceID;
+							id++;
 						}
-							// else update actualPosition and exit the loop
-						else {
-							ActualDevice = i;
-							break;
-						}
-					}
-					for (var i = 0; i < coordPoints.length - 1; i++) {
-						var colour;
-						var actualSpeed = data[i].speed;
-						if (data[i].speed <= 10) {
-							colour = Colors[5];
-						} else if (data[i].speed <= 15) {
-							colour = Colors[4];
-						} else if (data[i].speed <= 20) {
-							colour = Colors[3];
-						} else if (data[i].speed <= 30) {
-							colour = Colors[2];
-						} else if (data[i].speed <= 45) {
-							colour = Colors[1];
-						} else {
-							colour = Colors[0];
-						}
-
-						//sets up polylines and draws them
-						var PathStyle = new google.maps.Polyline({
-							txt: actualSpeed,
-							strokeOpacity: 0.85,
-							strokeWeight: 2,
-							strokeColor: colour,
-							clickable: true,
-							path: [coordPoints[i], coordPoints[i + 1]],
-							map: map
-						});
-
-						//PathStyle.setPath();
-
-						// speedTip = will load the speed value for each section for each device.
-						var speedTip = new google.maps.InfoWindow();
-						//Once the user click on the path the tooltip will pop with the speed value.
-						// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-						PathStyle.addListener('mouseover', function (e) {
-							speedTip.setPosition(e.latLng);
-							speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
-							speedTip.open(map);
-						});
-
-
-						trafficPaths.push(PathStyle);
-
-					}
+						textData += ']\n'+
+							'}\n';
+						var GeoPoints = JSON.parse(textData);
+						console.log({ GeoPoints });
+						break;
+					default:
+						console.log("NO OPTION SELECTED");
 				}
 
-				console.log("Done!");
+
 			}
 		})
 	}
 
+
+	function drawDevicePath(data, countDeviceID) {
+		// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
+		var ActualDevice = 0;
+		//loop through each device and draw each part, change the colour based on the speed
+		for (var j = 0; j < countDeviceID.length; j++) {
+			coordPoints = [];
+
+			for (var i = ActualDevice; i < data.length; i++) {
+				// if deviceID is the same in add values to coordPoints
+				if (data[i].deviceID == countDeviceID[j]) {
+					coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+				}
+					// else update actualPosition and exit the loop
+				else {
+					ActualDevice = i;
+					break;
+				}
+			}
+			for (var i = 0; i < coordPoints.length - 1; i++) {
+				var colour = selectColor(data[i].speed);
+				var actualSpeed = data[i].speed;
+
+
+				//sets up polylines and draws them
+				var PathStyle = new google.maps.Polyline({
+					txt: actualSpeed,
+					strokeOpacity: 0.85,
+					strokeWeight: 2,
+					strokeColor: colour,
+					clickable: true,
+					path: [coordPoints[i], coordPoints[i + 1]],
+					map: map
+				});
+
+				//PathStyle.setPath();
+
+				// speedTip = will load the speed value for each section for each device.
+				var speedTip = new google.maps.InfoWindow();
+				//Once the user click on the path the tooltip will pop with the speed value.
+				// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+				PathStyle.addListener('mouseover', function (e) {
+					speedTip.setPosition(e.latLng);
+					speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
+					speedTip.open(map);
+				});
+
+
+				trafficPaths.push(PathStyle);
+
+			}
+		}
+	}
+
+
 	function fillBox(hour) {
-		document.getElementById("valueOfddlSelectHour").value = hour + ":00";
+		document.getElementById("hour-range-value").value = hour + ":00";
 		//console.log(hour + day);
 	}
-</script>
-<form method="post">
-	<div id="floating-panel">
-		<label for="ddlSelectHour">Hour:</label>
-		<input type="range" id="ddlSelectHour" value="12" min="0" max="23" onchange="fillBox(this.value);">
-		<input type="text" disabled id="valueOfddlSelectHour" />
-		<label for="ddlSelectDay">Day:</label>
-		<select id="ddlSelectDay">
-			<option value="Monday">Monday</option>
-			<option value="Tuesday">Tuesday</option>
-			<option value="Wednesday">Wednesday</option>
-			<option value="Thursday">Thursday</option>
-			<option value="Friday">Friday</option>
-			<option value="Saturday">Saturday</option>
-			<option value="Sunday">Sunday</option>
-		</select>
-		<input type="button" name="update" id="refreshMap" value="Update" onclick="json()" />
-		<div id="contentHolder">
-		</div>
-	</div>
 
-</form>
-<div id="map" ></div>
+	/**
+	 * Counting the unique devices in the 'data' from the AJAX query
+	 * 'countDeviceID' will contain the unique IDs 'console.log(countDeviceID[0])' prints  "43C04062" corresponding ID value.
+	 * 'countDeviceID.length' will store the unique No. of IDs
+	 */
+	function deviceCounter(data) {
+		var countDeviceID = [], prevID;
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].deviceID !== prevID) {
+				countDeviceID.push(data[i].deviceID);
+			}
+			prevID = data[i].deviceID;
+		}
+		return countDeviceID;
+	}
+
+
+	/**
+	 * This function will separate the *data* in *sectors*
+	 * Sectors will be Circles which will give average speed in the area in a infoWindow()
+	 *
+	*/
+	function getSectors(data, sectors) {
+
+		var sumLat = 0;
+		var sumLon = 0;
+		var sumSpeed = 0;
+		var limit = data.length / sectors;
+		var sectorLimit = data.length / sectors;
+		var sector, sectorCircles = [];
+
+
+		for (var i = 0; i < data.length; i++) {
+			//add data values while in the limit
+			if (i < sectorLimit - 1) {
+				sumLat += data[i].latitude;
+				sumLon += data[i].longitude;
+				sumSpeed += data[i].speed;
+			}
+				// when limit is reached increase limit by double to track next range
+			else {
+				sector = {
+					lat: sumLat / limit,
+					lng: sumLon / limit,
+					speedC: selectColor(sumSpeed / limit)
+				}
+
+				sectorCircles.push(sector);
+
+				sectorLimit *= 2;
+				sumLat = 0;
+				sumLon = 0;
+				sumSpeed = 0;
+			}
+		}
+
+		for (var i = 0; i < sectorCircles.length; i++) {
+			console.log(sectorCircles[i]);
+			var busyCircle = new google.maps.Circle({
+				strokeColor: sectorCircles[i].speedC,
+				strokeOpacity: 1,
+				strokeWeight: 3,
+				fillColor: sectorCircles[i].speedC,
+				fillOpacity: 0.5,
+				map: map,
+				center: { lat: sectorCircles[i].lat, lng: sectorCircles[i].lng },
+				radius: limit
+			});
+			busyAreas.push(busyCircle);
+		}
+
+
+
+	}
+
+	//Clears the map
+	function clearMap() {
+
+		for (var i = 0; i < trafficPaths.length; i++) {
+			trafficPaths[i].setMap(null);
+		}
+		trafficPaths = [];
+
+
+		for (var i = 0; i < busyAreas.length; i++) {
+			busyAreas[i].setMap(null);
+		}
+		busyAreas = [];
+	}
+
+
+	//returns a colour base on a *speed*
+	function selectColor(speed) {
+		var colour;
+		if (speed <= 10) {
+			colour = Colors[5];
+		} else if (speed <= 15) {
+			colour = Colors[4];
+		} else if (speed <= 20) {
+			colour = Colors[3];
+		} else if (speed <= 30) {
+			colour = Colors[2];
+		} else if (speed <= 45) {
+			colour = Colors[1];
+		} else {
+			colour = Colors[0];
+		}
+		return colour;
+	}
+
+
+
+	/**	VORONOI IMPLEMENTATION **/
+	function voronoi(pointjson) {
+
+
+		var map = new google.maps.Map(document.getElementById('map_canvas'), {
+			zoom: 11,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			center: new google.maps.LatLng(36.322356, 139.013057),
+		});
+
+
+		var overlay = new google.maps.OverlayView();
+
+
+		overlay.onAdd = function () {
+
+			var layer = d3.select(this.getPanes().overlayLayer).append("div").attr("class", "SvgOverlay");
+			var svg = layer.append("svg");
+			var svgoverlay = svg.append("g").attr("class", "AdminDivisions");
+
+
+			overlay.draw = function () {
+				var markerOverlay = this;
+				var overlayProjection = markerOverlay.getProjection();
+
+
+				var googleMapProjection = function (coordinates) {
+					var googleCoordinates = new google.maps.LatLng(coordinates[1], coordinates[0]);
+					var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
+					return [pixelCoordinates.x + 4000, pixelCoordinates.y + 4000];
+				}
+
+
+				var pointdata = pointjson.features;
+
+
+				var positions = [];
+
+				pointdata.forEach(function (d) {
+					positions.push(googleMapProjection(d.geometry.coordinates));
+				});
+
+
+				var polygons = d3.geom.voronoi(positions);
+
+				var pathAttr = {
+					"d": function (d, i) { return "M" + polygons[i].join("L") + "Z" },
+					stroke: "red",
+					fill: "none"
+				};
+
+
+				svgoverlay.selectAll("path")
+					.data(pointdata)
+					.attr(pathAttr)
+					.enter()
+					.append("svg:path")
+					.attr("class", "cell")
+					.attr(pathAttr)
+
+				var circleAttr = {
+					"cx": function (d, i) { return positions[i][0]; },
+					"cy": function (d, i) { return positions[i][1]; },
+					"r": 2,
+					fill: "red"
+				}
+
+
+				svgoverlay.selectAll("circle")
+					.data(pointdata)
+					.attr(circleAttr)
+					.enter()
+					.append("svg:circle")
+					.attr(circleAttr)
+
+			};
+
+		};
+
+
+		overlay.setMap(map);
+
+
+	};
+
+
+
+</script>
+
+<div id="map"></div>
+
 <script async defer
 				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjsP0sefrRO0fFJ_cm6styahfGdJMkOBQ&libraries=visualization&callback=initMap">
 </script>

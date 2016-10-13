@@ -7,7 +7,7 @@
 		<h4 class="section-title">map controls:</h4>
 		<form method="post">
 			<div class="row">
-				<select class="form-control week-day-select" id="ddlSelectDay">
+				<select class="form-control week-day-select" id="week-day">
 					<option value="" disabled selected>Select Day</option>
 					<option value="Monday">Monday</option>
 					<option value="Tuesday">Tuesday</option>
@@ -44,8 +44,6 @@
 	function redirectPath(ActualPath, nextPath) {
 		if(ActualPath !== nextPath){
 			window.location = '..' + nextPath;
-		} else {
-			alert('path are the same, EXECV');
 		}
 	}
 
