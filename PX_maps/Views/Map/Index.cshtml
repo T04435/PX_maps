@@ -436,6 +436,7 @@
 					// else update actualPosition and exit the loop
 				else {
 				    speed = speed / speedCounter;
+				    speed = speed.toFixed(2);
 				    speedCounter = 0;
 					ActualDevice = i;
 					break;
@@ -496,8 +497,7 @@
 	        travelMode: google.maps.TravelMode.DRIVING,
 	        optimizeWaypoints: true
 	    }
-	    console.log(speed);
-	    requestArr.push({ "request": request, "colour": selectColor(speed) });
+	    requestArr.push({ "request": request, "colour": selectColor(speed), "avgSpeed": speed });
 	}
 	function sendRequest() {
 	    var i = 0;
@@ -508,32 +508,15 @@
 	    function directionResults(result, status) {
 	        if (status == "OK") {
 	            renderArr[i] = new google.maps.DirectionsRenderer();
-	            renderArr[i].setMap(map);
-
 	            renderArr[i].setOptions({
 	                preserveViewport: true,
 	                suppressInfoWindows: true,
-	                suppressMarkers: true,
-	                polylineOptions: {
-	                    //txt: actualSpeed,
-	                    strokeOpacity: 0.85,
-	                    strokeWeight: 2,
-	                    strokeColor: requestArr[i].colour
-	                }
+	                suppressMarkers: true
 	            });
-
-	            /*
-                // speedTip = will load the speed value for each section for each device.
-                var speedTip = new google.maps.InfoWindow();
-                //Once the user click on the path the tooltip will pop with the speed value.
-                // other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-                renderArr[i].addListener('mouseover', function (e) {
-                    speedTip.setPosition(e.latLng);
-                    speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
-                    speedTip.open(map);
-                });
-                */
+	            //renderArr[i].setMap(map);
 	            renderArr[i].setDirections(result);
+	            renderPolylines(renderArr[i], requestArr[i].colour, requestArr[i].avgSpeed);
+
 	        }
 	        else {
 	            console.log(status);
@@ -544,7 +527,7 @@
 	    }
 	    function next() {
 	        i++;
-	        if (i >= requestArr.length) {
+	        if (i >=  requestArr.length) {
 	            console.log(i);
 	            return;
 	        }
@@ -552,7 +535,42 @@
 	    }
 	    directionRequest();
 	}
+    
+	function renderPolylines(response, colour, speed) {
+	    var legs = response.directions.routes[0].legs;
 
+	    var polylineOptions = new google.maps.Polyline({
+	        txt: speed,
+	        strokeOpacity: 0.85,
+	        strokeWeight: 2,
+	        strokeColor: colour,
+	        clickable: true
+	    });
+
+	    for (var i = 0; i < legs.length; i++) {
+	        var steps = legs[i].steps;
+	        for (j = 0; j < steps.length; j++) {
+	            var nextSegment = steps[j].path;
+	            var stepPolyline = new google.maps.Polyline(polylineOptions);
+	            for (k = 0; k < nextSegment.length; k++) {
+	                stepPolyline.getPath().push(nextSegment[k]);
+	            }
+	            stepPolyline.setMap(map);
+
+	            // speedTip = will load the speed value for each section for each device.
+	            var speedTip = new google.maps.InfoWindow();
+	            //Once the user click on the path the tooltip will pop with the speed value.
+	            // other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+	            stepPolyline.addListener('click', function (e) {
+	                speedTip.setPosition(e.latLng);
+	                speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + speed + '</p></p>');
+	                speedTip.open(map);
+	                setTimeout(function () { speedTip.close(); }, 500);
+	            });
+	            trafficPaths.push(stepPolyline);
+	        }
+	    }
+	}
 
 	function fillBox(hour) {
 		document.getElementById("hour-range-value").value = hour + ":00";
