@@ -44,8 +44,7 @@ window.onload = function () {
 }
 
 function hideDashOnClick() {
-	classie.toggle(dashboard, 'dashboard-close');
-	classie.toggle(app, 'fullscreen');
+	dashboardControl.click();
 }
 
 dashboardControl.onclick = function () {
@@ -63,10 +62,10 @@ dashboardControl.onclick = function () {
 		default:
 			console.log('Enjoy Your Live');
 	}
-	if (this.innerHTML === 'hide') {
-		this.innerHTML = 'show';
+	if (dashboardControl.innerHTML === 'hide') {
+		dashboardControl.innerHTML = 'show';
 	} else {
-		this.innerHTML = 'hide';
+		dashboardControl.innerHTML = 'hide';
 	}
 }
 
