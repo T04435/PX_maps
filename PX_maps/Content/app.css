@@ -11,16 +11,13 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 10px; }
+  font-size: 14px; }
 
 body {
-  overflow: hidden; }
-
-p,
-a,
-span {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1.35rem; }
+  overflow: hidden;
+  background-color: #454b4f;
+  font-family: "Quicksand", sans-serif;
+  color: #f6f7eb; }
 
 h1,
 h2,
@@ -31,7 +28,14 @@ h6 {
   font-family: "Francois One", sans-serif;
   text-align: center;
   text-transform: capitalize;
-  font-variant: small-caps; }
+  font-variant: small-caps;
+  color: #f6f7eb; }
+
+a,
+a:hover,
+a:active,
+a:visited {
+  text-decoration: none; }
 
 .pxm-sideMenu {
   position: fixed;
@@ -41,9 +45,7 @@ h6 {
     display: none; }
   .pxm-sideMenu,
   .menu-trigger {
-    -webkit-transition: all 350ms ease;
-    -moz-transition: all 350ms ease;
-    transition: all 350ms ease; }
+    @nclude transitionEase(350); }
   .pxm-sideMenu h3 {
     display: block;
     color: #f6f7eb;
@@ -146,6 +148,10 @@ svg:not(:root) {
   height: 100%;
   width: 100%; }
 
+.speedTip_style {
+  background-color: #393e41 !important;
+  color: #f6f7eb !important; }
+
 /*
 	DASHBOARD
 */
@@ -157,7 +163,24 @@ svg:not(:root) {
   padding: 0 2rem;
   height: 100%;
   width: 25%;
-  background-color: #393e41; }
+  background-color: #393e41;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  -webkit-transition: all 350ms ease;
+  -moz-transition: all 350ms ease;
+  transition: all 350ms ease;
+  box-shadow: 0 2px 5px 0 rgba(246, 247, 235, 0.16), 0 2px 10px 0 rgba(246, 247, 235, 0.12); }
+  #dashboard.dashboard-close {
+    /*transform: rotateY(90deg);*/
+    height: 50px;
+    width: 100px;
+    border-bottom-right-radius: 7px;
+    transform-origin: left; }
+    #dashboard.dashboard-close #dashboard-control {
+      position: initial;
+      margin-bottom: 10000px; }
+  #dashboard::-webkit-scrollbar {
+    display: none; }
   #dashboard .section {
     border-bottom: 2px solid #8f989d; }
     #dashboard .section .section-title {
@@ -168,6 +191,18 @@ svg:not(:root) {
     padding-top: 0;
     margin-top: 0; }
 
+#dashboard-control {
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  transition: all 500ms ease;
+  display: block;
+  line-height: 2;
+  text-align: center;
+  font-family: "Francois One", sans-serif;
+  border-bottom: 5px solid #f6f7eb; }
+  #dashboard-control:hover {
+    cursor: pointer; }
+
 .full-width-btn, select {
   width: 100%;
   color: #f6f7eb !important; }
@@ -176,36 +211,52 @@ svg:not(:root) {
   background-color: #26A69A;
   border: none;
   border-radius: 2px;
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  text-align: center; }
 
-.footer {
-  position: absolute;
-  bottom: 5px; }
+.copy {
+  float: left; }
 
 .about {
-  right: 2rem; }
+  float: right; }
 
 /* APP-CONTAINER */
-.app-container {
+#app-container {
   position: absolute;
   top: 0;
   left: 25%;
   bottom: 0;
   right: 0;
   height: 100%;
-  width: 75%; }
+  width: 100%;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  transition: all 400ms ease; }
+  #app-container.fullscreen {
+    left: 0; }
 
 /* ABOUT US */
 .staff {
-  width: 25%;
-  margin: 3rem;
+  width: 21%;
+  margin: 3.5em;
   height: auto;
   overflow: hidden;
   position: relative;
   display: inline-block;
-  vertical-align: top; }
+  vertical-align: top;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  transition: all 400ms ease; }
+  .staff:nth-child(2) {
+    margin: 3.5em 0; }
+  .staff.fullscreen {
+    width: 27.5%; }
+    .staff.fullscreen .staff-photo {
+      width: 75%; }
   .staff .staff-photo {
-    width: 100%;
+    display: block;
+    margin: auto;
+    width: 95%;
     height: auto;
     border-radius: 50%;
     border: 10px solid;
@@ -216,16 +267,25 @@ svg:not(:root) {
     border-color: #f9dc5c; }
   .staff#fidel .staff-photo {
     border-color: #ef6461; }
-  .staff .staff-name {
-    text-decoration: underline; }
   .staff .staff-desc {
     text-align: center; }
+
+.initials {
+  font-size: 4rem;
+  font-family: "Francois One", sans-serif;
+  letter-spacing: 2px; }
+  .initials.K {
+    color: #f9dc5c; }
+  .initials.F {
+    color: #ef6461; }
+  .initials.C {
+    color: #7fb069; }
 
 input#hour-range-value {
   color: white;
   text-align: center;
   font-size: 1.5rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 2px; }
 
 ::-webkit-input-placeholder {
@@ -285,6 +345,19 @@ progress::-webkit-progress-value {
 
 /*	HELPERS  CLASSES  */
 .cta-text {
-  font-weight: 900;
-  color: #4b5155; }
+  font-weight: 600; }
+  #fidel .cta-text {
+    color: #ef6461; }
+
+.rotate-180 {
+  transform: rotateY(180deg); }
+
+.screen-center {
+  position: absolute;
+  width: 100%;
+  top: 35%; }
+
+.kfc-hidden {
+  display: none;
+  visibility: hidden; }
 

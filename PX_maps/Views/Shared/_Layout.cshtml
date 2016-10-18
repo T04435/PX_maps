@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - My ASP.NET Application</title>
-	<link href='https://fonts.googleapis.com/css?family=Francois+One|Titillium+Web:400,900' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Francois+One|Quicksand:400,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.1/d3.js"></script>
 		
@@ -14,7 +14,7 @@
 </head>
 <body>
 	@Html.Partial("_Dashboard")
-	<div class="app-container">
+	<div id="app-container">
 		@RenderBody()
 	</div>
 	
@@ -22,5 +22,24 @@
 	@Scripts.Render("~/bundles/bootstrap")
 	@Scripts.Render("~/Scripts/Site")
 	@RenderSection("scripts", required: false)
+	<script>
+	$(document).ready(function () {
+		var date = new Date();
+		var weekday = new Array(7);
+		weekday[0] = "Sunday";
+		weekday[1] = "Monday";
+		weekday[2] = "Tuesday";
+		weekday[3] = "Wednesday";
+		weekday[4] = "Thursday";
+		weekday[5] = "Friday";
+		weekday[6] = "Saturday";
+		var n = weekday[date.getDay()];
+
+		$("#hour-range").val(date.getHours());
+		$("#week-day").val(n);
+		fillBox($("#hour-range").val());
+	});
+	</script>
+
 </body>
 </html>

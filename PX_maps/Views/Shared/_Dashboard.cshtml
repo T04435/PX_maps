@@ -1,10 +1,8 @@
 ﻿
 <nav id="dashboard">
+	<span id="dashboard-control">hide</span>
+	<a runat="server" href="~/"><h1 class="title"><span class="K initials">K</span><span class="F initials">F</span><span class="C initials">C</span>_Maps</h1></a>
 	<div class="section">
-		<h1 class="title">KFC_Maps</h1>
-	</div>
-	<div class="section">
-		<h4 class="section-title">map controls:</h4>
 		<form method="post">
 			<div class="row">
 				<select class="form-control week-day-select" id="week-day">
@@ -19,32 +17,29 @@
 				</select>
 			</div>
 			<p class="range-field">
-				<input type="text"  disabled id="hour-range-value" placeholder="Please Select Time Bellow" value="" />
-				<input type="range" id="hour-range" min="0" max="23"  onchange="fillBox(this.value);"/>
+				<input type="text" disabled id="hour-range-value" placeholder="Please Select Time Bellow" value="" />
+				<input type="range" id="hour-range" min="0" max="23" onchange="fillBox(this.value);" />
 			</p>
 		</form>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index'), json(1)"><i class="material-icons right">trending_up</i>get traffic</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">settings_brightness</i>show heatmap</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">settings_ethernet</i>show voronoi</a>
+	</div>
+	<div class="section">
+		<a href="~/Map/Index" runat="server"><h4 class="section-title">map controls:</h4></a>
+		<div id="map-controls">
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick="json(1)"><i class="material-icons right">trending_up</i>get traffic</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">settings_brightness</i>show heatmap</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">settings_ethernet</i>show voronoi</a>
+		</div>
 	</div>
 	<div class="section">
 		<h4 class="section-title">Graph controls:</h4>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">view_week</i>show bar chart</a>
-		<a class="full-width-btn waves-effect waves-light btn-large" onclick="redirectPath(window.location.pathname, '/Map/Index')"><i class="material-icons right">track_changes</i>show donut graph</a>
+		<div id="graph-controls">
+			@* Create a graph for the average speed over a day from the data. *@
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">view_week</i>show bar chart</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">track_changes</i>show donut graph</a>
+		</div>
 	</div>
-	<div class="footer copy"><h6>&copy; <a target="_blank" href="http://www.westernsydney.edu.au/">WSU</a> - <a target="_blank" href="http://staff.scem.uws.edu.au/~vinh/">Dr. Quang Vinh Nguyen</a></h6></div>
-	<div class="footer about"><h6><a runat="server" href="~/Home/About">about us</a></h6></div>
+	@Html.Partial("_LoginPartial")
+	<div class="copy"><h6>&copy; <a target="_blank" href="http://www.westernsydney.edu.au/">WSU</a> - <a target="_blank" href="http://staff.scem.uws.edu.au/~vinh/">Dr. Quang Vinh Nguyen</a></h6></div>
+	<div class="about"><h6><a runat="server" href="~/Home/About">about us</a></h6></div>
 
 </nav>
-
-<script type="text/javascript">
-	const path = window.location.pathname;
-
-
-	function redirectPath(ActualPath, nextPath) {
-		if(ActualPath !== nextPath){
-			window.location = '..' + nextPath;
-		}
-	}
-
-</script>

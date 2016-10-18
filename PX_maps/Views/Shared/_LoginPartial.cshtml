@@ -1,22 +1,28 @@
 ﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
+<div class="section">
+	<h4 class="section-title">Management:</h4>
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-    }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
+	@if (Request.IsAuthenticated)
+	{
+		using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+		{
+			@Html.AntiForgeryToken()
+
+
+			@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+
+			<a href="javascript:document.getElementById('logoutForm').submit()" class="full-width-btn waves-effect waves-light btn-large"><i class="material-icons right rotate-180">input</i>Log off</a>
+			<a href="~/Database/Index" runat="server" class="full-width-btn waves-effect waves-light btn-large"><i class="material-icons right">open_in_browser</i>Upload Data</a>
+
+		}
+	}
+	else
+	{
+		@*@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })*@
+
+		<a href = "@Url.Action("Login", "Account")" id = "loginLink" class = "full-width-btn waves-effect waves-light btn-large" ><i class="material-icons right">input</i>Log in</a>
+
+		 @*@Html.ActionLink("Log in", "Login", "Account", routeValues: null)*@
+	}
+
+</div>
