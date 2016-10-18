@@ -12,6 +12,8 @@ var dashboardControl = document.getElementById('dashboard-control');
 var dashboard = document.getElementById('dashboard');
 var mapControl = document.getElementById('map-controls');
 var graphControl = document.getElementById('graph-controls');
+var trafficBtn = document.getElementById('get-traffic-btn');
+
 
 
 function redirectPath(ActualPath, nextPath) {
@@ -30,7 +32,7 @@ window.onload = function () {
 		classie.remove(mapControl, 'kfc-hidden');
 	}
 	switch (path) {
-		case (path.indexOf("/Map/") === -1):
+		case '/Map/Index':
 			break;
 		case '/Home/About':
 			dashboardControl.click();
@@ -41,6 +43,10 @@ window.onload = function () {
 	}
 }
 
+function hideDashOnClick() {
+	classie.toggle(dashboard, 'dashboard-close');
+	classie.toggle(app, 'fullscreen');
+}
 
 dashboardControl.onclick = function () {
 	classie.toggle(dashboard, 'dashboard-close');
