@@ -1,1 +1,22 @@
-﻿
+﻿<script>
+
+	function createGraph() {
+		var jsonData = JSON.stringify({ day: $("#week-day").val() })
+		console.log(jsonData.toString());
+		$.ajax({
+			type: 'POST',
+			url: '@Url.Action("getAVGDailySpeed")',
+			contentType: "application/json; charset=utf-8",
+			data: jsonData,
+			datatype: 'json',
+			success: function (data) {
+				console.log(data);
+
+			}
+		});
+	}
+
+</script>
+<div id="dailyAVGSpeed">
+	<h3>Daily Average Speed per Hour</h3>
+</div>

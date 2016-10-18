@@ -41,6 +41,11 @@ window.onload = function () {
 	} else {
 		classie.remove(mapControl, 'kfc-hidden');
 	}
+	if (path.indexOf("/Graph/") === -1) {
+		classie.add(graphControl, 'kfc-hidden');
+	} else {
+		classie.remove(graphControl, 'kfc-hidden');
+	}
 	switch (path) {
 		case '/Map/Index':
 			break;

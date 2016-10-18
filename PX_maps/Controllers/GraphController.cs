@@ -16,14 +16,13 @@ namespace PX_maps.Controllers
 			return View();
 		}
 
-		public List<Int32> getAVGDailySpeed(string day)
+		public JsonResult getAVGDailySpeed(string day)
 		{
 			List<Int32> dailyAvgSpeed = new List<int>();
 			SqlDataReader dr;
 
 			using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
 			{
-				//string CommandText = "SELECT (SUM(speed)/COUNT(speed)) FROM Data WHERE DATENAME(WEEKDAY,[isoDate]) = @weekday AND speed > 0 GROUP BY AND DATEPART(HOUR,[isoDate]) = @hour ";
 				string CommandText = "SELECT AVG(speed) AS hourlyAVGSpeed FROM Data WHERE DATENAME(WEEKDAY,[isoDate]) = @weekday AND speed > 0 GROUP BY DATEPART(HOUR,[isoDate]) ";
 
 				using (SqlCommand cmd = new SqlCommand(CommandText, dbconn))
@@ -41,8 +40,9 @@ namespace PX_maps.Controllers
 				}
 				dbconn.Close();
 			}
-
-			return dailyAvgSpeed;
+			JsonResult retVal = Json(dailyAvgSpeed, JsonRequestBehavior.AllowGet);
+			retVal.MaxJsonLength = 24;
+			return retVal;
 		}
 	}
 }
