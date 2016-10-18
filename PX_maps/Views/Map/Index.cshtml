@@ -9,16 +9,7 @@
 	var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService, breakPolylineDrawing = false, heatMapPath = [], heatmap;
 	var deviceCount = document.getElementById('device-count');
 	var counterDisplayedDevices = 0;
-	var Colors = [
-						"#7FB069", // LIGHT GREEN
-						"#034732", // GREEN
-						"#F9DC5C", // LIGHT YELLOW
-						"#FF9505", // YELLOW
-						"#EF6461", // LIGHT RED
-						"#630A08",  // RED
-					  "#EC0868" // ZERO
 
-	];
 	function initMap() {
 
 		map = new google.maps.Map(document.getElementById('map'), {
