@@ -1,341 +1,341 @@
 ﻿<script>
-	var trafficPaths = [], map, busyAreas = [], coordPoints = [];
+    var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService, breakPolylineDrawing = false;
 	var Colors = [
 						"#7FB069", // LIGHT GREEN
 						"#034732", // GREEN
 						"#F9DC5C", // LIGHT YELLOW
 						"#FF9505", // YELLOW
 						"#EF6461", // LIGHT RED
-						"#9E2B25",  // RED
-					  "#3C0000" // ZERO
+						"#630A08",  // RED
+					  "#EC0868" // ZERO
 
-	];
-	function initMap() {
+    ];
+    function initMap() {
 
-		map = new google.maps.Map(document.getElementById('map'), {
-			center: { lat: 10.8231, lng: 106.6297 },
-			zoom: 10,
-			disableDefaultUI: true,
-			styles: [
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 10.8231, lng: 106.6297 },
+            zoom: 10,
+            disableDefaultUI: true,
+            styles: [
   {
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#242f3e"
-      }
-  	]
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#242f3e"
+        }
+      ]
   },
   {
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      }
-  	]
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        }
+      ]
   },
   {
-  	"elementType": "labels.text.stroke",
-  	"stylers": [
-      {
-      	"color": "#383838"
-      }
-  	]
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+            "color": "#383838"
+        }
+      ]
   },
   {
-  	"featureType": "administrative.locality",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      },
-      {
-      	"visibility": "on"
-      }
-  	]
+      "featureType": "administrative.locality",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        },
+        {
+            "visibility": "on"
+        }
+      ]
   },
   {
-  	"featureType": "administrative.neighborhood",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "administrative.neighborhood",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "landscape",
-  	"stylers": [
-      {
-      	"color": "#EFEFEF"
-      }
-  	]
+      "featureType": "landscape",
+      "stylers": [
+        {
+            "color": "#EFEFEF"
+        }
+      ]
   },
   {
-  	"featureType": "poi",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "poi",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "poi.park",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "poi.park",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "poi.park",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#263c3f"
-      }
-  	]
+      "featureType": "poi.park",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#263c3f"
+        }
+      ]
   },
   {
-  	"featureType": "poi.park",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      }
-  	]
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        }
+      ]
   },
   {
-  	"featureType": "road",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#38414e"
-      }
-  	]
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#38414e"
+        }
+      ]
   },
   {
-  	"featureType": "road",
-  	"elementType": "geometry.stroke",
-  	"stylers": [
-      {
-      	"color": "#212a37"
-      }
-  	]
+      "featureType": "road",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+            "color": "#212a37"
+        }
+      ]
   },
   {
-  	"featureType": "road",
-  	"elementType": "labels",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "road",
+      "elementType": "labels",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "road",
-  	"elementType": "labels.icon",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "road",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "road",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      },
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "road",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        },
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "road.arterial",
-  	"elementType": "labels",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "road.arterial",
+      "elementType": "labels",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "road.highway",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#746855"
-      }
-  	]
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#746855"
+        }
+      ]
   },
   {
-  	"featureType": "road.highway",
-  	"elementType": "geometry.stroke",
-  	"stylers": [
-      {
-      	"color": "#1f2835"
-      },
-      {
-      	"weight": 1
-      }
-  	]
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+            "color": "#1f2835"
+        },
+        {
+            "weight": 1
+        }
+      ]
   },
   {
-  	"featureType": "road.highway",
-  	"elementType": "labels.icon",
-  	"stylers": [
-      {
-      	"visibility": "on"
-      }
-  	]
+      "featureType": "road.highway",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "on"
+        }
+      ]
   },
   {
-  	"featureType": "road.highway",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      }
-  	]
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        }
+      ]
   },
   {
-  	"featureType": "road.highway.controlled_access",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#746855"
-      },
-      {
-      	"weight": 1
-      }
-  	]
+      "featureType": "road.highway.controlled_access",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#746855"
+        },
+        {
+            "weight": 1
+        }
+      ]
   },
   {
-  	"featureType": "road.highway.controlled_access",
-  	"elementType": "geometry.fill",
-  	"stylers": [
-      {
-      	"color": "#746855"
-      },
-      {
-      	"weight": 5
-      }
-  	]
+      "featureType": "road.highway.controlled_access",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+            "color": "#746855"
+        },
+        {
+            "weight": 5
+        }
+      ]
   },
   {
-  	"featureType": "road.highway.controlled_access",
-  	"elementType": "geometry.stroke",
-  	"stylers": [
-      {
-      	"color": "#1f2835"
-      },
-      {
-      	"weight": 2
-      }
-  	]
+      "featureType": "road.highway.controlled_access",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+            "color": "#1f2835"
+        },
+        {
+            "weight": 2
+        }
+      ]
   },
   {
-  	"featureType": "road.local",
-  	"elementType": "labels",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "road.local",
+      "elementType": "labels",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "transit",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "transit",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "transit",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#2f3948"
-      }
-  	]
+      "featureType": "transit",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#2f3948"
+        }
+      ]
   },
   {
-  	"featureType": "transit",
-  	"elementType": "labels",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "transit",
+      "elementType": "labels",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "transit.station",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      }
-  	]
+      "featureType": "transit.station",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        }
+      ]
   },
   {
-  	"featureType": "transit.station.airport",
-  	"elementType": "labels.icon",
-  	"stylers": [
-      {
-      	"visibility": "simplified"
-      }
-  	]
+      "featureType": "transit.station.airport",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "simplified"
+        }
+      ]
   },
   {
-  	"featureType": "transit.station.bus",
-  	"elementType": "labels.icon",
-  	"stylers": [
-      {
-      	"visibility": "simplified"
-      }
-  	]
+      "featureType": "transit.station.bus",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "simplified"
+        }
+      ]
   },
   {
-  	"featureType": "water",
-  	"elementType": "geometry",
-  	"stylers": [
-      {
-      	"color": "#9DD1F1"
-      }
-  	]
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        {
+            "color": "#9DD1F1"
+        }
+      ]
   },
   {
-  	"featureType": "water",
-  	"elementType": "labels.text",
-  	"stylers": [
-      {
-      	"visibility": "off"
-      }
-  	]
+      "featureType": "water",
+      "elementType": "labels.text",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
+      ]
   },
   {
-  	"featureType": "water",
-  	"elementType": "labels.text.fill",
-  	"stylers": [
-      {
-      	"color": "#F37F27"
-      }
-  	]
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#F37F27"
+        }
+      ]
   },
   {
-  	"featureType": "water",
-  	"elementType": "labels.text.stroke",
-  	"stylers": [
-      {
-      	"color": "#383838"
-      }
-  	]
+      "featureType": "water",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+            "color": "#383838"
+        }
+      ]
   }
-			]
-		});
-	}
+            ]
+        });
+    }
 </script>
 <script>
 	
@@ -350,276 +350,383 @@
 			datatype: 'json',
 			success: function (data) {
 
-				clearMap();
+                clearMap();
 
-				var countDeviceID = deviceCounter(data);
+                var countDeviceID = deviceCounter(data);
 
-				console.log(countDeviceID.length);
+                console.log(countDeviceID.length);
 
 
-				switch (option) {
-					case 1:
-						console.log("OPTION 1");
-						drawDevicePath(data, countDeviceID);
-						console.log("Done!");
-						break;
-					case 2:
-						console.log("OPTION 2");
-						drawDevicePath(data, countDeviceID);
-						getSectors(data, 1);
-						break;
-					case 3:
-						console.log("OPTION 3");
-						//create the geoJson from the data
-						var textData = '{\n'+
-							'"type": "FeatureCollection",\n'+
+                switch (option) {
+                    case 1:
+                        console.log("OPTION 1");
+                        drawDevicePath(data, countDeviceID);
+                        console.log("Done!");
+                        break;
+                    case 2:
+                        console.log("OPTION 2");
+                        drawDevicePath(data, countDeviceID);
+                        getSectors(data, 1);
+                        break;
+                    case 3:
+                        console.log("OPTION 3");
+                        //create the geoJson from the data
+                        var textData = '{\n' +
+							'"type": "FeatureCollection",\n' +
 							'"features": [\n';
 
-						var id = 0;
-						var lastID;
-						while (id < data.length) {
-							if (data[id].deviceID !== lastID) {
-								textData += '{ "type": "Feature", "id":' +  id +', "properties": { }, "geometry": { "type": "Point", "coordinates": [' + data[id].latitude + ',' + data[id].longitude + '] } },\n';
-							}
-							lastID = data[id].deviceID;
-							id++;
-						}
-						textData += ']\n'+
+                        var id = 0;
+                        var lastID;
+                        while (id < data.length) {
+                            if (data[id].deviceID !== lastID) {
+                                textData += '{ "type": "Feature", "id":' + id + ', "properties": { }, "geometry": { "type": "Point", "coordinates": [' + data[id].latitude + ',' + data[id].longitude + '] } },\n';
+                            }
+                            lastID = data[id].deviceID;
+                            id++;
+                        }
+                        textData += ']\n' +
 							'}\n';
-						var GeoPoints = JSON.parse(textData);
-						console.log({ GeoPoints });
-						break;
-					default:
-						console.log("NO OPTION SELECTED");
-				}
+                        var GeoPoints = JSON.parse(textData);
+                        console.log({ GeoPoints });
+                        break;
+                    default:
+                        console.log("NO OPTION SELECTED");
+                }
 
 
-			}
-		})
-	}
+            }
+        })
+    }
 
 
-	function drawDevicePath(data, countDeviceID) {
-		// 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
-		var ActualDevice = 0;
-		//loop through each device and draw each part, change the colour based on the speed
-		for (var j = 0; j < countDeviceID.length; j++) {
-			coordPoints = [];
+    function drawDevicePath(data, countDeviceID) {
+        // 'ActualDevice' will be use to avoid runnig throuhg all the data every time, this var will store the last position on the data set
+        var ActualDevice = 0;
+        var speedCounter = 0;
+        //loop through each device and draw each part, change the colour based on the speed
+        for (var j = 0; j < countDeviceID.length; j++) {
+            coordPoints = [];
 
-			for (var i = ActualDevice; i < data.length; i++) {
-				// if deviceID is the same in add values to coordPoints
-				if (data[i].deviceID == countDeviceID[j]) {
-					coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
-				}
-					// else update actualPosition and exit the loop
-				else {
-					ActualDevice = i;
-					break;
-				}
-			}
-			for (var i = 0; i < coordPoints.length - 1; i++) {
-				var colour = selectColor(data[i].speed);
-				var actualSpeed = data[i].speed;
+            for (var i = ActualDevice; i < data.length; i++) {
+                // if deviceID is the same in add values to coordPoints
+                if (data[i].deviceID == countDeviceID[j]) {
+                    coordPoints.push(new google.maps.LatLng(data[i].latitude, data[i].longitude));
+                    speed += data[i].speed;
+                    speedCounter++;
+                }
+                    // else update actualPosition and exit the loop
+                else {
+                    speed = speed / speedCounter;
+                    speed = speed.toFixed(2);
+                    speedCounter = 0;
+                    ActualDevice = i;
+                    break;
+                }
+            }
+            slimCoordPoints();
+            buildRequest();
+            speed = 0;
+        }
+        sendRequest();
+    }
+    function slimCoordPoints() {
+        newCoordPoints = [];
+        var length = 4;
 
+        newCoordPoints.push(coordPoints[0]);
+        if (Math.floor(coordPoints.length / 2) < 4) {
+            length = Math.floor(coordPoints.length / 2);
+        }
+        for (var i = 0; i < length; i++) {
+            newCoordPoints.push(coordPoints[i + 1]);
+            //newCoordPoints.push(coordPoints[coordPoints.length - 1]);
+        }
+        for (var i = 0; i < length; i++) {
+            //newCoordPoints.push(coordPoints[length + 1]);
+            newCoordPoints.push(coordPoints[coordPoints.length - (1 + i)]);
+        }
+        newCoordPoints.push(coordPoints[coordPoints.length - 1]);
+        coordPoints = [];
+        coordPoints = newCoordPoints.slice();
+    }
+    function buildRequest() {
+        directionsService = new google.maps.DirectionsService();
+        var waypointArr = [];
+        var start, finish, lastPnt;
+        //console.log(coordPoints);
+        for (var i = 0; i < coordPoints.length; i++) {
+            if (coordPoints[i] === lastPnt) {
+                continue;
+            }
 
-				//sets up polylines and draws them
-				var PathStyle = new google.maps.Polyline({
-					txt: actualSpeed,
-					strokeOpacity: 0.85,
-					strokeWeight: 2,
-					strokeColor: colour,
-					clickable: true,
-					path: [coordPoints[i], coordPoints[i + 1]],
-					map: map
-				});
+            lastpoint = coordPoints[i]
+            waypointArr.push({
+                location: coordPoints[i],
+                stopover: true
+            });
+        }
+        //console.log(waypointArr);
+        start = (waypointArr.shift()).location;
+        finish = waypointArr.pop().location;
 
-				//PathStyle.setPath();
+        //console.log(start + finish);
 
-				// speedTip = will load the speed value for each section for each device.
-				var speedTip = new google.maps.InfoWindow();
-				//Once the user click on the path the tooltip will pop with the speed value.
-				// other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
-				PathStyle.addListener('mouseover', function (e) {
-					speedTip.setPosition(e.latLng);
-					speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + this.txt + '</p></p>');
-					speedTip.open(map);
-				});
+        var request = {
+            origin: start,
+            destination: finish,
+            waypoints: waypointArr,
+            travelMode: google.maps.TravelMode.DRIVING,
+            optimizeWaypoints: true
+        }
+        requestArr.push({ "request": request, "colour": selectColor(speed), "avgSpeed": speed });
+    }
+    function sendRequest() {
+        if (breakPolylineDrawing == true) {
+            breakPolylineDrawing = false;
+            throw new Error('This is not an error. This is just to abort javascript');
+        }
+        var i = 0;
+        var delay = 500;
 
+        function directionRequest() {
+            directionsService.route(requestArr[i].request, directionResults);
+        }
+        function directionResults(result, status) {
+            if (status == "OK") {
+                renderArr[i] = new google.maps.DirectionsRenderer();
+                renderArr[i].setOptions({
+                    preserveViewport: true,
+                    suppressInfoWindows: true,
+                    suppressMarkers: true
+                });
+                //renderArr[i].setMap(map);
+                renderArr[i].setDirections(result);
+                renderPolylines(renderArr[i], requestArr[i].colour, requestArr[i].avgSpeed);
 
-				trafficPaths.push(PathStyle);
+            }
+            next();
 
-			}
-		}
-	}
+        }
+        function next() {
+            i++;
+            if (i >= requestArr.length) {
+                console.log(i);
+                return;
+            }
+            setTimeout(function () { directionRequest(); }, delay);
+        }
+        directionRequest();
+    }
+
+    function renderPolylines(response, colour, speed) {
+        var legs = response.directions.routes[0].legs;
+
+        var polylineOptions = new google.maps.Polyline({
+            txt: speed,
+            strokeOpacity: 0.85,
+            strokeWeight: 2,
+            strokeColor: colour,
+            clickable: true
+        });
+
+        for (var i = 0; i < legs.length; i++) {
+            var steps = legs[i].steps;
+            for (j = 0; j < steps.length; j++) {
+                var nextSegment = steps[j].path;
+                var stepPolyline = new google.maps.Polyline(polylineOptions);
+                for (k = 0; k < nextSegment.length; k++) {
+                    stepPolyline.getPath().push(nextSegment[k]);
+                }
+                stepPolyline.setMap(map);
+
+                // speedTip = will load the speed value for each section for each device.
+                var speedTip = new google.maps.InfoWindow();
+                var windowOpen = false;
+                //Once the user click on the path the tooltip will pop with the speed value.
+                // other events are: 'click''dblclick''mouseup''mousedown''mouseover''mouseout'
+                stepPolyline.addListener('click', function (e) {
+                    speedTip.setPosition(e.latLng);
+                    speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + speed + 'km/h</p></p>');
+                    speedTip.setMap(map);
+                });
+                trafficPaths.push(stepPolyline);
+            }
+        }
+    }
 
 
 	
 
-	/**
+    /**
 	 * Counting the unique devices in the 'data' from the AJAX query
 	 * 'countDeviceID' will contain the unique IDs 'console.log(countDeviceID[0])' prints  "43C04062" corresponding ID value.
 	 * 'countDeviceID.length' will store the unique No. of IDs
 	 */
-	function deviceCounter(data) {
-		var countDeviceID = [], prevID;
-		for (var i = 0; i < data.length; i++) {
-			if (data[i].deviceID !== prevID) {
-				countDeviceID.push(data[i].deviceID);
-			}
-			prevID = data[i].deviceID;
-		}
-		return countDeviceID;
-	}
+    function deviceCounter(data) {
+        var countDeviceID = [], prevID;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].deviceID !== prevID) {
+                countDeviceID.push(data[i].deviceID);
+            }
+            prevID = data[i].deviceID;
+        }
+        return countDeviceID;
+    }
 
 
-	/**
+    /**
 	 * This function will separate the *data* in *sectors*
 	 * Sectors will be Circles which will give average speed in the area in a infoWindow()
 	 *
 	*/
-	function getSectors(data, sectors) {
+    function getSectors(data, sectors) {
 
-		var sumLat = 0;
-		var sumLon = 0;
-		var sumSpeed = 0;
-		var limit = data.length / sectors;
-		var sectorLimit = data.length / sectors;
-		var sector, sectorCircles = [];
-
-
-		for (var i = 0; i < data.length; i++) {
-			//add data values while in the limit
-			if (i < sectorLimit - 1) {
-				sumLat += data[i].latitude;
-				sumLon += data[i].longitude;
-				sumSpeed += data[i].speed;
-			}
-				// when limit is reached increase limit by double to track next range
-			else {
-				sector = {
-					lat: sumLat / limit,
-					lng: sumLon / limit,
-					speedC: selectColor(sumSpeed / limit)
-				}
-
-				sectorCircles.push(sector);
-
-				sectorLimit *= 2;
-				sumLat = 0;
-				sumLon = 0;
-				sumSpeed = 0;
-			}
-		}
-
-		for (var i = 0; i < sectorCircles.length; i++) {
-			console.log(sectorCircles[i]);
-			var busyCircle = new google.maps.Circle({
-				strokeColor: sectorCircles[i].speedC,
-				strokeOpacity: 1,
-				strokeWeight: 3,
-				fillColor: sectorCircles[i].speedC,
-				fillOpacity: 0.5,
-				map: map,
-				center: { lat: sectorCircles[i].lat, lng: sectorCircles[i].lng },
-				radius: limit
-			});
-			busyAreas.push(busyCircle);
-		}
+        var sumLat = 0;
+        var sumLon = 0;
+        var sumSpeed = 0;
+        var limit = data.length / sectors;
+        var sectorLimit = data.length / sectors;
+        var sector, sectorCircles = [];
 
 
+        for (var i = 0; i < data.length; i++) {
+            //add data values while in the limit
+            if (i < sectorLimit - 1) {
+                sumLat += data[i].latitude;
+                sumLon += data[i].longitude;
+                sumSpeed += data[i].speed;
+            }
+                // when limit is reached increase limit by double to track next range
+            else {
+                sector = {
+                    lat: sumLat / limit,
+                    lng: sumLon / limit,
+                    speedC: selectColor(sumSpeed / limit)
+                }
 
-	}
+                sectorCircles.push(sector);
 
-	//Clears the map
-	function clearMap() {
+                sectorLimit *= 2;
+                sumLat = 0;
+                sumLon = 0;
+                sumSpeed = 0;
+            }
+        }
 
-		for (var i = 0; i < trafficPaths.length; i++) {
-			trafficPaths[i].setMap(null);
-		}
-		trafficPaths = [];
-
-
-		for (var i = 0; i < busyAreas.length; i++) {
-			busyAreas[i].setMap(null);
-		}
-		busyAreas = [];
-	}
-
-
-	//returns a colour base on a *speed*
-	function selectColor(speed) {
-		var colour;
-		if (speed <= 10) {
-			colour = Colors[5];
-		} else if (speed <= 15) {
-			colour = Colors[4];
-		} else if (speed <= 20) {
-			colour = Colors[3];
-		} else if (speed <= 30) {
-			colour = Colors[2];
-		} else if (speed <= 45) {
-			colour = Colors[1];
-		} else {
-			colour = Colors[0];
-		}
-		return colour;
-	}
+        for (var i = 0; i < sectorCircles.length; i++) {
+            console.log(sectorCircles[i]);
+            var busyCircle = new google.maps.Circle({
+                strokeColor: sectorCircles[i].speedC,
+                strokeOpacity: 1,
+                strokeWeight: 3,
+                fillColor: sectorCircles[i].speedC,
+                fillOpacity: 0.5,
+                map: map,
+                center: { lat: sectorCircles[i].lat, lng: sectorCircles[i].lng },
+                radius: limit
+            });
+            busyAreas.push(busyCircle);
+        }
 
 
 
-	/**	VORONOI IMPLEMENTATION **/
-	function voronoi(pointjson) {
+    }
+
+    //Clears the map
+    function clearMap() {
+        if (trafficPaths.length != 0) {
+            breakPolylineDrawing = true;
+        }
+
+        for (var i = 0; i < trafficPaths.length; i++) {
+            trafficPaths[i].setMap(null);
+        }
+        trafficPaths = [];
+
+        requestArr = [];
+        renderArr = [];
+
+        for (var i = 0; i < busyAreas.length; i++) {
+            busyAreas[i].setMap(null);
+        }
+        busyAreas = [];
+    }
 
 
-		var map = new google.maps.Map(document.getElementById('map_canvas'), {
-			zoom: 11,
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			center: new google.maps.LatLng(36.322356, 139.013057),
-		});
+    //returns a colour base on a *speed*
+    function selectColor(speed) {
+        var colour;
+        if (speed <= 10) {
+            colour = Colors[5];
+        } else if (speed <= 15) {
+            colour = Colors[4];
+        } else if (speed <= 20) {
+            colour = Colors[3];
+        } else if (speed <= 30) {
+            colour = Colors[2];
+        } else if (speed <= 45) {
+            colour = Colors[1];
+        } else {
+            colour = Colors[0];
+        }
+        return colour;
+    }
 
 
-		var overlay = new google.maps.OverlayView();
+
+    /**	VORONOI IMPLEMENTATION **/
+    function voronoi(pointjson) {
 
 
-		overlay.onAdd = function () {
-
-			var layer = d3.select(this.getPanes().overlayLayer).append("div").attr("class", "SvgOverlay");
-			var svg = layer.append("svg");
-			var svgoverlay = svg.append("g").attr("class", "AdminDivisions");
-
-
-			overlay.draw = function () {
-				var markerOverlay = this;
-				var overlayProjection = markerOverlay.getProjection();
+        var map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: 11,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: new google.maps.LatLng(36.322356, 139.013057),
+        });
 
 
-				var googleMapProjection = function (coordinates) {
-					var googleCoordinates = new google.maps.LatLng(coordinates[1], coordinates[0]);
-					var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
-					return [pixelCoordinates.x + 4000, pixelCoordinates.y + 4000];
-				}
+        var overlay = new google.maps.OverlayView();
 
 
-				var pointdata = pointjson.features;
+        overlay.onAdd = function () {
+
+            var layer = d3.select(this.getPanes().overlayLayer).append("div").attr("class", "SvgOverlay");
+            var svg = layer.append("svg");
+            var svgoverlay = svg.append("g").attr("class", "AdminDivisions");
 
 
-				var positions = [];
-
-				pointdata.forEach(function (d) {
-					positions.push(googleMapProjection(d.geometry.coordinates));
-				});
+            overlay.draw = function () {
+                var markerOverlay = this;
+                var overlayProjection = markerOverlay.getProjection();
 
 
-				var polygons = d3.geom.voronoi(positions);
-
-				var pathAttr = {
-					"d": function (d, i) { return "M" + polygons[i].join("L") + "Z" },
-					stroke: "red",
-					fill: "none"
-				};
+                var googleMapProjection = function (coordinates) {
+                    var googleCoordinates = new google.maps.LatLng(coordinates[1], coordinates[0]);
+                    var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
+                    return [pixelCoordinates.x + 4000, pixelCoordinates.y + 4000];
+                }
 
 
-				svgoverlay.selectAll("path")
+                var pointdata = pointjson.features;
+
+
+                var positions = [];
+
+                pointdata.forEach(function (d) {
+                    positions.push(googleMapProjection(d.geometry.coordinates));
+                });
+
+
+                var polygons = d3.geom.voronoi(positions);
+
+                var pathAttr = {
+                    "d": function (d, i) { return "M" + polygons[i].join("L") + "Z" },
+                    stroke: "red",
+                    fill: "none"
+                };
+
+
+                svgoverlay.selectAll("path")
 					.data(pointdata)
 					.attr(pathAttr)
 					.enter()
@@ -627,30 +734,30 @@
 					.attr("class", "cell")
 					.attr(pathAttr)
 
-				var circleAttr = {
-					"cx": function (d, i) { return positions[i][0]; },
-					"cy": function (d, i) { return positions[i][1]; },
-					"r": 2,
-					fill: "red"
-				}
+                var circleAttr = {
+                    "cx": function (d, i) { return positions[i][0]; },
+                    "cy": function (d, i) { return positions[i][1]; },
+                    "r": 2,
+                    fill: "red"
+                }
 
 
-				svgoverlay.selectAll("circle")
+                svgoverlay.selectAll("circle")
 					.data(pointdata)
 					.attr(circleAttr)
 					.enter()
 					.append("svg:circle")
 					.attr(circleAttr)
 
-			};
+            };
 
-		};
-
-
-		overlay.setMap(map);
+        };
 
 
-	};
+        overlay.setMap(map);
+
+
+    };
 
 
 
@@ -659,5 +766,5 @@
 <div id="map"></div>
 
 <script async defer
-				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjsP0sefrRO0fFJ_cm6styahfGdJMkOBQ&libraries=visualization&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGlnvoCrUPeQyx9_dRMzOuRU_VwKl92eg&libraries=visualization&callback=initMap">
 </script>
