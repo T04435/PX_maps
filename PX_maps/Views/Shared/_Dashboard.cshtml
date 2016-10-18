@@ -25,18 +25,17 @@
 	<div class="section">
 		<a href="~/Map/Index" runat="server"><h4 class="section-title">map controls:</h4></a>
 		<div id="map-controls">
-			<a class="full-width-btn waves-effect waves-light btn-large" id="get-traffic-btn" onclick="json(1),hideDashOnClick()"><i class="material-icons right">trending_up</i>get traffic</a>
-			<a class="full-width-btn waves-effect waves-light btn-large" onclick="json(2), hideDashOnClick()"><i class="material-icons right">settings_brightness</i>show heatmap</a>
-			<a class="full-width-btn waves-effect waves-light btn-large" onclick="json(3), hideDashOnClick()"><i class="material-icons right">settings_ethernet</i>show voronoi</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick="json(1)"><i class="material-icons right">trending_up</i>get traffic</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">settings_brightness</i>show heatmap</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">settings_ethernet</i>show voronoi</a>
 		</div>
 	</div>
 	<div class="section">
 		<h4 class="section-title">Graph controls:</h4>
 		<div id="graph-controls">
 			@* Create a graph for the average speed over a day from the data. *@
-			<a class="full-width-btn waves-effect waves-light btn-large" onclick="hideDashOnClick()"><i class="material-icons right">view_week</i>show bar chart</a>
-
-			<a class="full-width-btn waves-effect waves-light btn-large" onclick="hideDashOnClick()"><i class="material-icons right">track_changes</i>show donut graph</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">view_week</i>show bar chart</a>
+			<a class="full-width-btn waves-effect waves-light btn-large" onclick=""><i class="material-icons right">track_changes</i>show donut graph</a>
 		</div>
 	</div>
 	@Html.Partial("_LoginPartial")

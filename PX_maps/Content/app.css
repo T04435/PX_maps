@@ -152,24 +152,6 @@ svg:not(:root) {
   background-color: #393e41 !important;
   color: #f6f7eb !important; }
 
-.device-count-container {
-  position: fixed;
-  z-index: 9000;
-  top: 0;
-  right: 0;
-  background-color: #393e41;
-  border-bottom-left-radius: 5px;
-  padding: 10px; }
-  .device-count-container p {
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    color: #f6f7eb; }
-    .device-count-container p #device-count {
-      font-family: "Francois One", sans-serif;
-      font-weight: 700;
-      letter-spacing: 2px; }
-
 /*
 	DASHBOARD
 */
