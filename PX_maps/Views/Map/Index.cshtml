@@ -1,7 +1,7 @@
 ﻿
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
-    var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService, infoWindow = false;
+    var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService, breakPolylineDrawing = false;
     var Colors = [
 						"#88E39E", // LIGHT GREEN
 						"#7FB069", // GREEN
@@ -500,6 +500,10 @@
         requestArr.push({ "request": request, "colour": selectColor(speed), "avgSpeed": speed });
     }
     function sendRequest() {
+        if (breakPolylineDrawing == true) {
+            breakPolylineDrawing = false;
+            throw new Error('This is not an error. This is just to abort javascript');
+        }
         var i = 0;
         var delay = 500;
 
@@ -518,12 +522,6 @@
                 renderArr[i].setDirections(result);
                 renderPolylines(renderArr[i], requestArr[i].colour, requestArr[i].avgSpeed);
 
-            }
-            else {
-                console.log(status);
-                console.log(requestArr[i]);
-                delay += 500;
-                setTimeout(function () { directionRequest(); }, delay);
             }
             next();
 
@@ -569,7 +567,6 @@
                     speedTip.setPosition(e.latLng);
                     speedTip.setContent('<div class="speedTip_style"><p>Speed: ' + speed + 'km/h</p></p>');
                     speedTip.setMap(map);
-                    setTimeout(function () { speedTip.close(); }, 1000);
                 });
                 trafficPaths.push(stepPolyline);
             }
@@ -658,12 +655,17 @@
 
     //Clears the map
     function clearMap() {
+        if (trafficPaths.length != 0) {
+            breakPolylineDrawing = true;
+        }
 
         for (var i = 0; i < trafficPaths.length; i++) {
             trafficPaths[i].setMap(null);
         }
         trafficPaths = [];
 
+        requestArr = [];
+        renderArr = [];
 
         for (var i = 0; i < busyAreas.length; i++) {
             busyAreas[i].setMap(null);
