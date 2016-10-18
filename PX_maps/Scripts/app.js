@@ -5,6 +5,16 @@
  * active/disable
  */
 
+const Colors = [
+						"#7FB069", // LIGHT GREEN
+						"#034732", // GREEN
+						"#F9DC5C", // LIGHT YELLOW
+						"#FF9505", // YELLOW
+						"#EF6461", // LIGHT RED
+						"#630A08",  // RED
+					  "#EC0868" // ZERO
+
+];
 
 const path = window.location.pathname;
 var app = document.getElementById('app-container');
