@@ -1,15 +1,13 @@
-﻿
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script>
+﻿<script>
 	var trafficPaths = [], map, busyAreas = [], coordPoints = [];
 	var Colors = [
-						"#88E39E", // LIGHT GREEN
-						"#7FB069", // GREEN
-						"#F9E793", // LIGHT YELLOW
-						"#F9DC5C", // YELLOW
+						"#7FB069", // LIGHT GREEN
+						"#034732", // GREEN
+						"#F9DC5C", // LIGHT YELLOW
+						"#FF9505", // YELLOW
 						"#EF6461", // LIGHT RED
-						"#630A08",  // RED
-					  "#EC0868" // ZERO
+						"#9E2B25",  // RED
+					  "#3C0000" // ZERO
 
 	];
 	function initMap() {
@@ -340,24 +338,7 @@
 	}
 </script>
 <script>
-	$(document).ready(function () {
-		var date = new Date();
-		var weekday = new Array(7);
-		weekday[0] = "Sunday";
-		weekday[1] = "Monday";
-		weekday[2] = "Tuesday";
-		weekday[3] = "Wednesday";
-		weekday[4] = "Thursday";
-		weekday[5] = "Friday";
-		weekday[6] = "Saturday";
-		var n = weekday[date.getDay()];
-
-		$("#hour-range").val(date.getHours());
-		$("#week-day").val(n);
-		//fillBox($("#hour-range-value").val());
-		//json(3);
-		
-	});
+	
 	function json(option) {
 		var jsonData = JSON.stringify({ hour: $("#hour-range").val(), day: $("#week-day").val() })
 		console.log(jsonData.toString());
@@ -472,10 +453,7 @@
 	}
 
 
-	function fillBox(hour) {
-		document.getElementById("hour-range-value").value = hour + ":00";
-		//console.log(hour + day);
-	}
+	
 
 	/**
 	 * Counting the unique devices in the 'data' from the AJAX query

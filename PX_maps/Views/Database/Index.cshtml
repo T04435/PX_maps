@@ -1,17 +1,29 @@
 ﻿@{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
 }
+<div class="screen-center">
 
-<h2>Index</h2>
+	<h2>Upload GPS data below</h2>
+	<hr />
+	@Html.Raw(TempData["File"])
+	<div class="row">
+		<div class="col push-s3 s6">
 
-<p>Upload GPS data below</p>
-@Html.Raw(TempData["File"]);
-<form action="" method="post" enctype="multipart/form-data">
-    
-    <label for="files">Filename:</label>
-    <input type="file" name="files" id="files" accept=".txt,.csv" webkitdirectory directory multiple />
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="file-field input-field">
+					<div class="btn">
+						<span>File</span>
+						<input type="file" name="files" id="files" accept=".txt,.csv" webkitdirectory directory multiple />
+					</div>
+					<div class="file-path-wrapper">
+						<input class="file-path validate" type="text" placeholder="Upload one or more files">
+					</div>
+				</div>
 
-    <input type="submit" />
-</form>
+				<input type="submit" value="upload" class="waves-effect waves-light btn" />
+			</form>
+		</div>
+	</div>
+</div>
 
 
