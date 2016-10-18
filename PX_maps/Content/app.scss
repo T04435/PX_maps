@@ -55,9 +55,10 @@ h6 {
 a,
 a:hover,
 a:active,
-a:visited{
+a:visited {
 	text-decoration: none;
 }
+
 .pxm-sideMenu {
 	position: fixed;
 	background: $black;
@@ -227,11 +228,33 @@ svg:not(:root) {
 	width: 100%;
 }
 
-.speedTip_style{
+.speedTip_style {
 	background-color: $black !important;
 	color: $white !important;
 }
 
+.device-count-container {
+	position: fixed;
+	z-index: 9000;
+	top: 0;
+	right: 0;
+	background-color: $black;
+	border-bottom-left-radius: 5px;
+	padding: 10px;
+
+	& p {
+		margin: 0;
+		padding: 0;
+		line-height: 1;
+		color: $white;
+
+		& #device-count {
+			font-family: $headerFont;
+			font-weight: 700;
+			letter-spacing: 2px;
+		}
+	}
+}
 
 /*
 	DASHBOARD
@@ -250,6 +273,7 @@ svg:not(:root) {
 	-ms-overflow-style: none; // IE 10+
 	@include transitionEase(350);
 	box-shadow: 0 2px 5px 0 rgba($white, 0.16), 0 2px 10px 0 rgba($white, 0.12);
+
 	&.dashboard-close {
 		/*transform: rotateY(90deg);*/
 		height: 50px;
@@ -306,7 +330,7 @@ svg:not(:root) {
 	border: none;
 	border-radius: 2px;
 	text-transform: uppercase;
-	text-align:center;
+	text-align: center;
 }
 
 .copy {
@@ -345,13 +369,16 @@ svg:not(:root) {
 	display: inline-block;
 	vertical-align: top;
 	@include transitionEase(400);
-	&:nth-child(2){
+
+	&:nth-child(2) {
 		margin: 3.5em 0;
 	}
+
 	&.fullscreen {
 		width: 27.5%;
-		& .staff-photo{
-			width:75%;
+
+		& .staff-photo {
+			width: 75%;
 		}
 	}
 
@@ -385,20 +412,24 @@ svg:not(:root) {
 	}
 }
 
-.initials{
+.initials {
 	font-size: 4rem;
-	font-family:$headerFont;
+	font-family: $headerFont;
 	letter-spacing: 2px;
-	&.K{
+
+	&.K {
 		color: $yellow;
 	}
-	&.F{
+
+	&.F {
 		color: $red;
 	}
-	&.C{
+
+	&.C {
 		color: $green;
 	}
 }
+
 input#hour-range-value {
 	color: white;
 	text-align: center;
@@ -478,7 +509,8 @@ progress::-webkit-progress-value {
 /*	HELPERS  CLASSES  */
 .cta-text {
 	font-weight: 600;
-	#fidel &{
+
+	#fidel & {
 		color: $red;
 	}
 }
@@ -493,7 +525,7 @@ progress::-webkit-progress-value {
 	top: 35%;
 }
 
-.kfc-hidden{
-	display:none;
+.kfc-hidden {
+	display: none;
 	visibility: hidden;
 }
