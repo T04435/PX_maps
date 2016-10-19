@@ -1,7 +1,6 @@
 ﻿
 
 function clearD3() {
-	document.getElementById('showVisualizationMenu').click();
 	let D3Charts = document.querySelectorAll('[id^="D3"]');
 
 	for (var i = 0; i < D3Charts.length; i++) {

@@ -34,9 +34,9 @@ namespace PX_maps
 
 			bundles.Add(new ScriptBundle("~/Scripts/Site").Include(
 								"~/Scripts/app.js",
-								"~/Scripts/classie.js",
-								"~/Scripts/materialize.js",
-								"~/Scripts/d3.min.js"));
+                                "~/Scripts/point.geojson",
+                                "~/Scripts/classie.js",
+								"~/Scripts/materialize.js"));
 			BundleTable.EnableOptimizations = false;
 		}
 	}
