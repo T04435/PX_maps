@@ -413,7 +413,7 @@
                             }
                             prevID = data[i].deviceID;
                         }
-                        main(vData);
+                        drawVoronoi(vData);
                         console.log(vData);
                         break;
                     default:
@@ -737,10 +737,8 @@
 
 
     /**	VORONOI IMPLEMENTATION **/
-    function main(pointjson) {
-
-        //Google Map 初期化
-        var overlay = new google.maps.OverlayView(); //OverLayオブジェクトの作成
+    function drawVoronoi(pointjson) {
+        var overlay = new google.maps.OverlayView();
 
 
         overlay.onAdd = function () {
@@ -750,8 +748,6 @@
             var svgoverlay = svg.append("g").attr("class", "AdminDivisions");
             var markerOverlay = this;
             var overlayProjection = markerOverlay.getProjection();
-
-            //Google Mapの投影法設定
             var googleMapProjection = function (coordinates) {
                 var googleCoordinates = new google.maps.LatLng(coordinates[0], coordinates[1]);
                 var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
@@ -759,22 +755,13 @@
             }
 
             overlay.draw = function () { };
-
-            //再描画時に呼ばれるコールバック
             overlay.draw = function () {
-
-
-                //母点位置情報
                 var pointdata = pointjson.features;
-
-                //ピクセルポジション情報
                 var positions = [];
 
                 pointdata.forEach(function (d) {
-                    positions.push(googleMapProjection(d.geometry.coordinates)); //位置情報→ピクセル
+                    positions.push(googleMapProjection(d.geometry.coordinates));
                 });
-
-                //ボロノイ変換関数
                 var polygons = d3.geom.voronoi(positions);
 
                 var pathAttr = {
@@ -782,8 +769,6 @@
                     stroke: "red",
                     fill: "none"
                 };
-
-                //境界表示
                 svgoverlay.selectAll("path")
                     .data(pointdata)
                     .attr(pathAttr)
@@ -798,8 +783,6 @@
                     "r": 2,
                     fill: "red"
                 }
-
-                //母点表示
                 svgoverlay.selectAll("circle")
                     .data(pointdata)
                     .attr(circleAttr)
@@ -810,8 +793,6 @@
             };
 
         };
-
-        //作成したSVGを地図にオーバーレイする
         overlay.setMap(map);
 
 
