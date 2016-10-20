@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PX_maps.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -18,7 +19,7 @@ namespace PX_maps.Controllers
 
 		public JsonResult getAVGDailySpeed(string day)
 		{
-			List<Int32> dailyAvgSpeed = new List<int>();
+			List<GraphModels> dailyAvgSpeed = new List<GraphModels>();
 			SqlDataReader dr;
 
 			using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
@@ -34,14 +35,17 @@ namespace PX_maps.Controllers
 					{
 						while (dr.Read())
 						{
-							dailyAvgSpeed.Add(Int32.Parse(dr["hourlyAVGSpeed"].ToString()));
+							dailyAvgSpeed.Add(new GraphModels
+							{
+								avgSpeed = Decimal.Parse(dr["hourlyAVGSpeed"].ToString())
+							});
 						}
 					}
 				}
 				dbconn.Close();
 			}
 			JsonResult retVal = Json(dailyAvgSpeed, JsonRequestBehavior.AllowGet);
-			retVal.MaxJsonLength = 24;
+			retVal.MaxJsonLength = 485638;
 			return retVal;
 		}
 	}

@@ -1,4 +1,7 @@
-﻿<script>
+﻿<div id="D3dailyAVGSpeedGraph">
+	<h1>Daily Average Speed per Hour</h1>
+</div>
+<script>
 
 	function createGraph() {
 		var jsonData = JSON.stringify({ day: $("#week-day").val() })
@@ -10,13 +13,14 @@
 			data: jsonData,
 			datatype: 'json',
 			success: function (data) {
-				console.log(data);
-
+				
+				var dataset = [];
+				for (var i = 0; i < data.length ;i++) {
+					dataset.push(Math.round(data[i].avgSpeed));
+				}
+				barChart(dataset);
 			}
 		});
 	}
 
 </script>
-<div id="dailyAVGSpeed">
-	<h3>Daily Average Speed per Hour</h3>
-</div>
