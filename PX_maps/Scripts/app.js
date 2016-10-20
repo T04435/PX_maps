@@ -114,3 +114,21 @@ function hasClass(elem, cls) {
 	return (" " + elem.className + " ").indexOf(" " + cls + " ") > -1;
 }
 
+//returns a colour base on a *speed*
+function selectColor(speed) {
+	var colour;
+	if (speed <= 10) {
+		colour = Colors[5];
+	} else if (speed <= 15) {
+		colour = Colors[4];
+	} else if (speed <= 20) {
+		colour = Colors[3];
+	} else if (speed <= 30) {
+		colour = Colors[2];
+	} else if (speed <= 45) {
+		colour = Colors[1];
+	} else {
+		colour = Colors[0];
+	}
+	return colour;
+}

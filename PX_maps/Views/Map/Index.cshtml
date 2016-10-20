@@ -5,6 +5,15 @@
 	</p>
 </div>
 <div id="map"></div>
+<div id="legend">
+	<span>10</span>
+	<span>15</span>
+	<span>20</span>
+	<span>30</span>
+	<span>45</span>
+	<span>55</span>
+	<span>65+</span>
+</div>
 <script>
 	var trafficPaths = [], map, busyAreas = [], coordPoints = [], requestArr = [], speed = 0, renderArr = [], directionsService, breakPolylineDrawing = false, heatMapPath = [], heatmap;
 	var deviceCount = document.getElementById('device-count');
@@ -679,26 +688,6 @@
 			heatmap.setMap(null);
 		}
 		heatMapPath = [];
-	}
-
-
-	//returns a colour base on a *speed*
-	function selectColor(speed) {
-		var colour;
-		if (speed <= 10) {
-			colour = Colors[5];
-		} else if (speed <= 15) {
-			colour = Colors[4];
-		} else if (speed <= 20) {
-			colour = Colors[3];
-		} else if (speed <= 30) {
-			colour = Colors[2];
-		} else if (speed <= 45) {
-			colour = Colors[1];
-		} else {
-			colour = Colors[0];
-		}
-		return colour;
 	}
 
 
