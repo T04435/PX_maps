@@ -101,6 +101,14 @@ a:visited {
 /*
  * 3DCSS code from here down will only be used for 3DCSS
  */
+#D3dailyAVGSpeedGraph {
+  max-width: 50%;
+  display: block;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%); }
+
 svg:not(:root) {
   overflow: visible; }
 
@@ -109,31 +117,39 @@ svg:not(:root) {
   -moz-transition: all 500ms ease;
   transition: all 500ms ease; }
 
-#D3 {
-  text-align: center; }
-  #D3 .D3bar {
-    fill: #29274c; }
-    #D3 .D3bar:nth-child(n + 11) {
-      fill: #1b998b; }
-    #D3 .D3bar:nth-child(n + 21) {
-      fill: #e78f8e; }
+.D3graphHeader,
+.D3graphSubHeader,
+.D3graphMaxSpeed,
+.D3graphMinSpeed {
+  position: absolute; }
 
-@media only screen and (max-width: 768px) {
-  /*svg {
-		transform: scaleX(0.275);
-		transform-origin: left;
-	}*/
-  .menu-trigger {
-    top: 5%; } }
+.D3graphHeader {
+  bottom: 700%; }
 
-@media only screen and (min-width: 320px) and (max-width: 640px) and (orientation: landscape) {
-  .barChart {
-    transform: scale(0.5);
-    transform-origin: left; } }
+.D3graphSubHeader {
+  bottom: 650%; }
 
-@media only screen and (min-width: 320px) and (max-width: 640px) and (orientation: portrait) {
-  .barChart {
-    display: none; } }
+.D3graphMinSpeed,
+.D3graphMaxSpeed,
+.D3barSpeed,
+.D3barHour {
+  font-size: 1.5em;
+  font-weight: 700;
+  fill: #454b4f; }
+
+.D3graphMaxSpeed {
+  bottom: 600%; }
+  .D3graphMaxSpeed span {
+    color: #7fb069; }
+
+.D3graphMinSpeed {
+  bottom: 600%;
+  right: 0; }
+  .D3graphMinSpeed span {
+    color: #ef6461; }
+
+.D3barHour {
+  fill: white; }
 
 /*
  * GMAPS code from here down will only be used for GMAPS 
@@ -169,6 +185,10 @@ svg:not(:root) {
       font-family: "Francois One", sans-serif;
       font-weight: 700;
       letter-spacing: 2px; }
+
+#legend {
+  display: block;
+  z-index: 9999; }
 
 /*
 	DASHBOARD

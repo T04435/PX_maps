@@ -5,7 +5,7 @@ $menuWindth: 90%;
 $menuZindex: 500;
 $menuTriggerTop: 45%;
 $menuTriggerPull: 20px;
-
+$D3ChartHearderPos: 700%;
 $headerFont: 'Francois One', sans-serif;
 $textFont: 'Quicksand', sans-serif;
 
@@ -161,6 +161,16 @@ a:visited {
 /*
  * 3DCSS code from here down will only be used for 3DCSS
  */
+
+#D3dailyAVGSpeedGraph {
+	max-width: 50%;
+	display: block;
+	margin: auto;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
 svg:not(:root) {
 	overflow: visible;
 }
@@ -169,48 +179,51 @@ svg:not(:root) {
 	@include transitionEase(500);
 }
 
-#D3 {
-	text-align: center;
+.D3graphHeader,
+.D3graphSubHeader,
+.D3graphMaxSpeed,
+.D3graphMinSpeed {
+	position: absolute;
+}
 
-	& .D3bar {
-		fill: $D3purple;
+.D3graphHeader {
+	bottom: $D3ChartHearderPos;
+}
 
-		&:nth-child(n + 11) {
-			fill: $D3sea;
-		}
+.D3graphSubHeader {
+	bottom: $D3ChartHearderPos - 50;
+}
 
-		&:nth-child(n + 21) {
-			fill: $D3pink;
-		}
+.D3graphMinSpeed,
+.D3graphMaxSpeed,
+.D3barSpeed,
+.D3barHour {
+	font-size: 1.5em;
+	font-weight: 700;
+	fill: lighten($black, 5%);
+}
+
+.D3graphMaxSpeed {
+	bottom: $D3ChartHearderPos - 100;
+
+	& span {
+		color: $green;
+	}
+}
+
+.D3graphMinSpeed {
+	bottom: $D3ChartHearderPos - 100;
+	right: 0;
+
+	& span {
+		color: $red;
 	}
 }
 
 
-@media only screen and (max-width: 768px) {
-
-	/*svg {
-		transform: scaleX(0.275);
-		transform-origin: left;
-	}*/
-	.menu-trigger {
-		top: 5%;
-	}
+.D3barHour {
+	fill: white;
 }
-
-@include screen(320px, 640px, landscape) {
-	.barChart {
-		transform: scale(0.5);
-		transform-origin: left;
-	}
-}
-
-@include screen(320px, 640px, portrait) {
-	.barChart {
-		display: none;
-	}
-}
-
-
 
 /*
  * GMAPS code from here down will only be used for GMAPS 
@@ -254,6 +267,12 @@ svg:not(:root) {
 			letter-spacing: 2px;
 		}
 	}
+}
+
+
+#legend {
+	display: block;
+	z-index: 9999;
 }
 
 /*
