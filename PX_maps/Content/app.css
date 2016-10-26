@@ -98,16 +98,40 @@ a:visited {
       right: calc( 90% - 20px);
       z-index: 490; }
 
+/* APP-CONTAINER */
+#app-container {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  transition: all 400ms ease; }
+  #app-container.fullscreen {
+    left: 0; }
+
 /*
  * 3DCSS code from here down will only be used for 3DCSS
  */
-#D3dailyAVGSpeedGraph {
-  max-width: 50%;
-  display: block;
-  margin: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%); }
+@media only screen and (orientation: portrait) {
+  #app-container {
+    left: 0; }
+    #app-container:before {
+      content: "Please rotate your Device to LANDSCAPE";
+      font-family: "Francois One", sans-serif;
+      font-size: 3rem;
+      text-align: center;
+      width: 100vw;
+      height: 100vh;
+      background-color: #393e41;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 25% 15%;
+      z-index: 1000; } }
 
 svg:not(:root) {
   overflow: visible; }
@@ -124,10 +148,14 @@ svg:not(:root) {
   position: absolute; }
 
 .D3graphHeader {
-  bottom: 700%; }
+  bottom: 590%;
+  width: 100vw;
+  left: 26%; }
 
 .D3graphSubHeader {
-  bottom: 650%; }
+  bottom: 550%;
+  width: 100vw;
+  left: 26%; }
 
 .D3graphMinSpeed,
 .D3graphMaxSpeed,
@@ -138,18 +166,50 @@ svg:not(:root) {
   fill: #454b4f; }
 
 .D3graphMaxSpeed {
-  bottom: 600%; }
+  bottom: 500%;
+  right: 0; }
   .D3graphMaxSpeed span {
     color: #7fb069; }
 
 .D3graphMinSpeed {
-  bottom: 600%;
-  right: 0; }
+  bottom: 500%;
+  right: -125%; }
   .D3graphMinSpeed span {
     color: #ef6461; }
 
 .D3barHour {
   fill: white; }
+
+#D3dailyAVGSpeedGraph {
+  position: absolute;
+  bottom: 15px;
+  transform: scale(0.7); }
+
+@media only screen and (min-width: 768px) {
+  #D3dailyAVGSpeedGraph {
+    bottom: 250px;
+    left: 10%;
+    transform: none; }
+  .D3graphHeader {
+    left: -20%; }
+  .D3graphSubHeader {
+    left: -20%; } }
+
+@media only screen and (min-width: 1256px) {
+  #D3dailyAVGSpeedGraph {
+    max-width: 50%;
+    display: block;
+    margin-left: 15%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); }
+  .D3graphHeader,
+  .D3graphSubHeader {
+    width: initial; }
+  .D3graphMaxSpeed {
+    left: 0; }
+  .D3graphMinSpeed {
+    right: 0; } }
 
 /*
  * GMAPS code from here down will only be used for GMAPS 
@@ -215,9 +275,9 @@ svg:not(:root) {
   display: block;
   z-index: 9999;
   position: fixed;
-  bottom: 0;
-  right: 3.75%;
-  width: 25%;
+  bottom: -5px;
+  right: 10%;
+  width: 90%;
   height: 45px;
   background-color: tomato;
   border: 2px #393e41 solid;
@@ -230,19 +290,28 @@ svg:not(:root) {
   background: linear-gradient(to left, #7FB069, #034732, #F9DC5C, #FF9505, #EF6461, #630A08);
   border-top-left-radius: 5px;
   font-size: 1.25rem; }
+  @media only screen and (min-width: 768px) {
+    #legend {
+      width: 50%;
+      right: 4%; } }
+  @media only screen and (min-width: 1256px) {
+    #legend {
+      width: 25%;
+      right: 3.75%; } }
   #legend::after {
+    font-size: 12px;
     content: 'Km/h';
     position: absolute;
     top: -2px;
-    right: -15.55%;
-    width: 15.55%;
+    right: -15%;
+    width: 15%;
     height: 45px;
     background-color: #393e41;
     padding: 5px;
     border: 2px #393e41 solid;
     line-height: 50px; }
   #legend span {
-    width: 15.55%;
+    width: 15%;
     border-right: 2px solid #393e41;
     display: inline-block;
     height: 100%;
@@ -262,7 +331,7 @@ svg:not(:root) {
   left: 0;
   padding: 0 2rem;
   height: 100%;
-  width: 25%;
+  width: 90%;
   background-color: #393e41;
   overflow-y: scroll;
   -ms-overflow-style: none;
@@ -270,6 +339,12 @@ svg:not(:root) {
   -moz-transition: all 350ms ease;
   transition: all 350ms ease;
   box-shadow: 0 2px 5px 0 rgba(246, 247, 235, 0.16), 0 2px 10px 0 rgba(246, 247, 235, 0.12); }
+  @media only screen and (min-width: 768px) {
+    #dashboard {
+      width: 45%; } }
+  @media only screen and (min-width: 1256px) {
+    #dashboard {
+      width: 25%; } }
   #dashboard.dashboard-close {
     /*transform: rotateY(90deg);*/
     height: 50px;
@@ -320,21 +395,6 @@ svg:not(:root) {
 .about {
   float: right; }
 
-/* APP-CONTAINER */
-#app-container {
-  position: absolute;
-  top: 0;
-  left: 25%;
-  bottom: 0;
-  right: 0;
-  height: 100%;
-  width: 100%;
-  -webkit-transition: all 400ms ease;
-  -moz-transition: all 400ms ease;
-  transition: all 400ms ease; }
-  #app-container.fullscreen {
-    left: 0; }
-
 /* ABOUT US */
 .staff {
   width: 21%;
@@ -350,7 +410,7 @@ svg:not(:root) {
   .staff:nth-child(2) {
     margin: 3.5em 0; }
   .staff.fullscreen {
-    width: 27.5%; }
+    width: 22.5%; }
     .staff.fullscreen .staff-photo {
       width: 75%; }
   .staff .staff-photo {
@@ -369,6 +429,22 @@ svg:not(:root) {
     border-color: #ef6461; }
   .staff .staff-desc {
     text-align: center; }
+
+@media only screen and (min-width: 768px) {
+  .staff {
+    width: 21%; }
+    .staff.fullscreen {
+      width: 26.55%; }
+      .staff.fullscreen .staff-photo {
+        width: 75%; } }
+
+@media only screen and (min-width: 1256px) {
+  .staff {
+    width: 21%; }
+  .fullscreen {
+    width: 27.5%; }
+    .fullscreen .staff-photo {
+      width: 75%; } }
 
 .initials {
   font-size: 4rem;

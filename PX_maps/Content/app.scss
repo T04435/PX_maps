@@ -5,7 +5,7 @@ $menuWindth: 90%;
 $menuZindex: 500;
 $menuTriggerTop: 45%;
 $menuTriggerPull: 20px;
-$D3ChartHearderPos: 700%;
+$D3ChartHearderPos: 600%;
 $headerFont: 'Francois One', sans-serif;
 $textFont: 'Quicksand', sans-serif;
 
@@ -157,19 +157,48 @@ a:visited {
 }
 
 
+/* APP-CONTAINER */
+#app-container {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	bottom: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+	@include transitionEase(400);
+
+	&.fullscreen {
+		left: 0;
+	}
+}
 
 /*
  * 3DCSS code from here down will only be used for 3DCSS
  */
 
-#D3dailyAVGSpeedGraph {
-	max-width: 50%;
-	display: block;
-	margin: auto;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
+@include portrait {
+	#app-container {
+		left: 0;
+
+		&:before {
+			content: "Please rotate your Device to LANDSCAPE";
+			font-family: $headerFont;
+			font-size: 3rem;
+			text-align: center;
+			width: 100vw;
+			height: 100vh;
+			background-color: $black;
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 25% 15%;
+			z-index: 1000;
+		}
+	}
 }
+
+
 
 svg:not(:root) {
 	overflow: visible;
@@ -187,11 +216,15 @@ svg:not(:root) {
 }
 
 .D3graphHeader {
-	bottom: $D3ChartHearderPos;
+	bottom: $D3ChartHearderPos - 10;
+	width: 100vw;
+	left: 26%;
 }
 
 .D3graphSubHeader {
 	bottom: $D3ChartHearderPos - 50;
+	width: 100vw;
+	left: 26%;
 }
 
 .D3graphMinSpeed,
@@ -205,6 +238,7 @@ svg:not(:root) {
 
 .D3graphMaxSpeed {
 	bottom: $D3ChartHearderPos - 100;
+	right: 0;
 
 	& span {
 		color: $green;
@@ -213,7 +247,7 @@ svg:not(:root) {
 
 .D3graphMinSpeed {
 	bottom: $D3ChartHearderPos - 100;
-	right: 0;
+	right: -125%;
 
 	& span {
 		color: $red;
@@ -224,6 +258,55 @@ svg:not(:root) {
 .D3barHour {
 	fill: white;
 }
+
+#D3dailyAVGSpeedGraph {
+	position: absolute;
+	bottom: 15px;
+	transform: scale(.7);
+}
+
+@media only screen and (min-width: 768px) {
+	#D3dailyAVGSpeedGraph {
+		bottom: 250px;
+		left: 10%;
+		transform: none;
+	}
+
+	.D3graphHeader {
+		left: -20%;
+	}
+
+	.D3graphSubHeader {
+		left: -20%;
+	}
+}
+
+@media only screen and (min-width: 1256px) {
+	#D3dailyAVGSpeedGraph {
+		max-width: 50%;
+		display: block;
+		margin-left: 15%;
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.D3graphHeader,
+	.D3graphSubHeader {
+		width: initial;
+	}
+
+
+	.D3graphMaxSpeed {
+		left: 0;
+	}
+
+	.D3graphMinSpeed {
+		right: 0;
+	}
+}
+
+
 
 /*
  * GMAPS code from here down will only be used for GMAPS 
@@ -300,9 +383,9 @@ svg:not(:root) {
 	display: block;
 	z-index: 9999;
 	position: fixed;
-	bottom: 0;
-	right: 3.75%;
-	width: 25%;
+	bottom: -5px;
+	right: 10%;
+	width: 90%;
 	height: 45px;
 	background-color: tomato;
 	border: 2px $black solid;
@@ -316,12 +399,23 @@ svg:not(:root) {
 	border-top-left-radius: 5px;
 	font-size: 1.25rem;
 
+	@media only screen and (min-width: 768px) {
+		width: 50%;
+		right: 4%;
+	}
+
+	@media only screen and (min-width: 1256px) {
+		width: 25%;
+		right: 3.75%;
+	}
+
 	&::after {
+		font-size: 12px;
 		content: 'Km/h';
 		position: absolute;
 		top: -2px;
-		right: -15.55%;
-		width: 15.55%;
+		right: -15%;
+		width: 15%;
 		height: 45px;
 		background-color: $black;
 		padding: 5px;
@@ -330,7 +424,7 @@ svg:not(:root) {
 	}
 
 	& span {
-		width: 15.55%;
+		width: 15%;
 		border-right: 2px solid $black;
 		display: inline-block;
 		height: 100%;
@@ -355,12 +449,20 @@ svg:not(:root) {
 	left: 0;
 	padding: 0 2rem;
 	height: 100%;
-	width: 25%;
+	width: 90%;
 	background-color: $black;
 	overflow-y: scroll;
 	-ms-overflow-style: none; // IE 10+
 	@include transitionEase(350);
 	box-shadow: 0 2px 5px 0 rgba($white, 0.16), 0 2px 10px 0 rgba($white, 0.12);
+
+	@media only screen and (min-width: 768px) {
+		width: 45%;
+	}
+
+	@media only screen and (min-width: 1256px) {
+		width: 25%;
+	}
 
 	&.dashboard-close {
 		/*transform: rotateY(90deg);*/
@@ -429,24 +531,8 @@ svg:not(:root) {
 	float: right;
 }
 
-
-/* APP-CONTAINER */
-#app-container {
-	position: absolute;
-	top: 0;
-	left: 25%;
-	bottom: 0;
-	right: 0;
-	height: 100%;
-	width: 100%;
-	@include transitionEase(400);
-
-	&.fullscreen {
-		left: 0;
-	}
-}
-
 /* ABOUT US */
+
 
 .staff {
 	width: 21%;
@@ -463,7 +549,7 @@ svg:not(:root) {
 	}
 
 	&.fullscreen {
-		width: 27.5%;
+		width: 22.5%;
 
 		& .staff-photo {
 			width: 75%;
@@ -479,6 +565,7 @@ svg:not(:root) {
 		border: 10px solid;
 		box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 	}
+
 
 	&#chris .staff-photo {
 		border-color: $green;
@@ -497,6 +584,34 @@ svg:not(:root) {
 
 	& .staff-desc {
 		text-align: center;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	.staff {
+		width: 21%;
+
+		&.fullscreen {
+			width: 26.55%;
+
+			& .staff-photo {
+				width: 75%;
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 1256px) {
+	.staff {
+		width: 21%;
+	}
+
+	&.fullscreen {
+		width: 27.5%;
+
+		& .staff-photo {
+			width: 75%;
+		}
 	}
 }
 
