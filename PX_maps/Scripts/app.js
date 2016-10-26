@@ -11,10 +11,17 @@ const Colors = [
 						"#F9DC5C", // LIGHT YELLOW
 						"#FF9505", // YELLOW
 						"#EF6461", // LIGHT RED
-						"#630A08",  // RED
-					  "#EC0868" // ZERO
-
+						"#630A08"  // RED
 ];
+
+const ColorsTransparent = [
+	"rgba(127,176,105,0.75)",
+	"rgba(3,71,50,0.75)",
+	"rgba(249,220,92,0.75)",
+	"rgba(255,149,5,0.75)",
+	"rgba(239,100,97,0.75)",
+	"rgba(99,10,8,0.75)"
+]
 
 const path = window.location.pathname;
 var app = document.getElementById('app-container');
@@ -23,6 +30,8 @@ var dashboard = document.getElementById('dashboard');
 var mapControl = document.getElementById('map-controls');
 var graphControl = document.getElementById('graph-controls');
 var trafficBtn = document.getElementById('get-traffic-btn');
+var daySelect = document.getElementById('week-day');
+var timeSelect = document.getElementById('hour-selector');
 
 
 
@@ -36,24 +45,23 @@ function redirectPath(ActualPath, nextPath) {
 
 window.onload = function () {
 	console.log(path);
-	if (path.indexOf("/Map/") === -1) {
-		classie.add(mapControl, 'kfc-hidden');
-	} else {
-		classie.remove(mapControl, 'kfc-hidden');
-	}
-	if (path.indexOf("/Graph/") === -1) {
-		classie.add(graphControl, 'kfc-hidden');
-	} else {
-		classie.remove(graphControl, 'kfc-hidden');
-	}
+
+
+	hideAllControls();
 	switch (path) {
 		case '/Map/Index':
+			classie.remove(mapControl, 'kfc-hidden');
+			classie.remove(timeSelect, 'kfc-hidden');
+			classie.remove(daySelect, 'kfc-hidden');
+			break;
+		case '/Graph/Index':
+			classie.remove(graphControl, 'kfc-hidden');
+			classie.remove(daySelect, 'kfc-hidden');
+
 			break;
 		case '/Home/About':
 			dashboardControl.click();
-			break;
 		default:
-			console.log('Enjoy Your Live');
 
 	}
 }
@@ -86,14 +94,12 @@ dashboardControl.onclick = function () {
 
 
 
-//showMapsMenu.onclick = function () {
-//	classie.toggle(this, 'active');
-//	classie.toggle(menuMaps, 'pxm-sideMenu-open');
-//	classie.toggle(triggerMenuVisualization, 'fa-area-chart');
-//	classie.toggle(triggerMenuVisualization, 'fa-ban');
-//	disableOther('showMapsMenu');
-//}
-
+function hideAllControls() {
+	classie.add(timeSelect, 'kfc-hidden');
+	classie.add(daySelect, 'kfc-hidden');
+	classie.add(mapControl, 'kfc-hidden');
+	classie.add(graphControl, 'kfc-hidden');
+}
 
 function disableOther(btn) {
 	if (btn !== 'showVisualizationMenu') {
@@ -129,6 +135,24 @@ function selectColor(speed) {
 		colour = Colors[1];
 	} else {
 		colour = Colors[0];
+	}
+	return colour;
+}
+//returns a colour base on a *speed*
+function selectColorTrans(speed) {
+	var colour;
+	if (speed <= 10) {
+		colour = ColorsTransparent[5];
+	} else if (speed <= 15) {
+		colour = ColorsTransparent[4];
+	} else if (speed <= 20) {
+		colour = ColorsTransparent[3];
+	} else if (speed <= 30) {
+		colour = ColorsTransparent[2];
+	} else if (speed <= 45) {
+		colour = ColorsTransparent[1];
+	} else {
+		colour = ColorsTransparent[0];
 	}
 	return colour;
 }

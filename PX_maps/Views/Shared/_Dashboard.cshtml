@@ -1,7 +1,7 @@
 ﻿
 <nav id="dashboard">
 	<span id="dashboard-control">hide</span>
-	<a runat="server" href="~/"><h1 class="title"><span class="K initials">K</span><span class="F initials">F</span><span class="C initials">C</span>_Maps</h1></a>
+	<a runat="server" href="~/Map/Index"><h1 class="title"><span class="K initials">K</span><span class="F initials">F</span><span class="C initials">C</span>_Maps</h1></a>
 	<div class="section">
 		<form method="post">
 			<div class="row">
@@ -16,7 +16,7 @@
 					<option value="Sunday">Sunday</option>
 				</select>
 			</div>
-			<p class="range-field">
+			<p id="hour-selector" class="range-field">
 				<input type="text" disabled id="hour-range-value" placeholder="Please Select Time Bellow" value="" />
 				<input type="range" id="hour-range" min="0" max="23" onchange="fillBox(this.value);" />
 			</p>

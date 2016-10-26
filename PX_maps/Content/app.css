@@ -164,6 +164,23 @@ svg:not(:root) {
   height: 100%;
   width: 100%; }
 
+.SvgOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  height: 100%;
+  width: 100%; }
+
+.SvgOverlay svg {
+  position: absolute;
+  top: -4000px;
+  left: -4000px;
+  width: 8000px;
+  height: 8000px; }
+
 .speedTip_style {
   background-color: #393e41 !important;
   color: #f6f7eb !important; }
@@ -186,9 +203,54 @@ svg:not(:root) {
       font-weight: 700;
       letter-spacing: 2px; }
 
+/*
+	"#7FB069", // LIGHT GREEN
+  "#034732", // GREEN
+	"#F9DC5C", // LIGHT YELLOW
+	"#FF9505", // YELLOW
+	"#EF6461", // LIGHT RED
+	"#630A08"  // RED
+*/
 #legend {
   display: block;
-  z-index: 9999; }
+  z-index: 9999;
+  position: fixed;
+  bottom: 0;
+  right: 3.75%;
+  width: 25%;
+  height: 45px;
+  background-color: tomato;
+  border: 2px #393e41 solid;
+  background: -webkit-linear-gradient(right, #7FB069, #034732, #F9DC5C, #FF9505, #EF6461, #630A08);
+  /* For Opera 11.1 to 12.0 */
+  background: -o-linear-gradient(right, #7FB069, #034732, #F9DC5C, #FF9505, #EF6461, #630A08);
+  /* For Fx 3.6 to 15 */
+  background: -moz-linear-gradient(right, #7FB069, #034732, #F9DC5C, #FF9505, #EF6461, #630A08);
+  /* Standard syntax */
+  background: linear-gradient(to left, #7FB069, #034732, #F9DC5C, #FF9505, #EF6461, #630A08);
+  border-top-left-radius: 5px;
+  font-size: 1.25rem; }
+  #legend::after {
+    content: 'Km/h';
+    position: absolute;
+    top: -2px;
+    right: -15.55%;
+    width: 15.55%;
+    height: 45px;
+    background-color: #393e41;
+    padding: 5px;
+    border: 2px #393e41 solid;
+    line-height: 50px; }
+  #legend span {
+    width: 15.55%;
+    border-right: 2px solid #393e41;
+    display: inline-block;
+    height: 100%;
+    text-align: right;
+    line-height: 45px;
+    padding: 5px; }
+    #legend span:last-child {
+      border: none; }
 
 /*
 	DASHBOARD
@@ -386,6 +448,10 @@ progress::-webkit-progress-value {
   font-weight: 600; }
   #fidel .cta-text {
     color: #ef6461; }
+  #chris .cta-text {
+    color: #7fb069; }
+  #kieren .cta-text {
+    color: #f9dc5c; }
 
 .rotate-180 {
   transform: rotateY(180deg); }
