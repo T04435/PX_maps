@@ -17,7 +17,7 @@ namespace PX_maps.Controllers
         // GET: Database
         public ActionResult Index()
         {
-            // update database 
+            // Show the default view of the Database
             return View();
         }
 
@@ -28,10 +28,11 @@ namespace PX_maps.Controllers
             {
                 using (TextFieldParser csvReader = new TextFieldParser(csv_file_path))
                 {
+                    //Csv reader is used to store the file currently being read
                     csvReader.SetDelimiters(new string[] { "," });
                     csvReader.HasFieldsEnclosedInQuotes = false;
                     string[] colFields = new string[9];
-										
+					//The coloumns need to be the same as the database table and have the same number of fields				
                     colFields[0] = "deviceId";
                     colFields[1] = "latitude";
                     colFields[2] = "longitude";
@@ -41,6 +42,7 @@ namespace PX_maps.Controllers
                     colFields[6] = "type";
                     colFields[7] = "lock";
                     colFields[8] = "isoDate";
+
                     Regex csvrgx = new Regex(@"^\w{3,9}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,2}\,\d\.\d\,\d\,\d\,\d\,[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
                     foreach (string column in colFields)
                     {
@@ -52,12 +54,17 @@ namespace PX_maps.Controllers
                     {
                         string[] fieldData = csvReader.ReadFields();
                         string fieldDataString = string.Join(",", fieldData);
+                        /*This regex will check the current row and if it doesnt match the regex it will move onto the next row
+                        * The regex will accept this "51C18087,10.88865,106.81669,0.0,0.0,0,1,0,Wed Sep 10 00:15:00 ICT 2014"
+                        */
                         if (csvrgx.IsMatch(fieldDataString))
                         {
                             for (int i = 0; i < fieldData.Length; i++)
                             {
                                 Regex datergx = new Regex(@"^[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
-
+                                /*  This regex checks the date to make sure it isnt malformed as it will crash the database if the date is incorrect
+                                 *  This if statement will convert the date from ISO to a date SQL will accept.
+                                 */
                                 if (datergx.IsMatch(fieldData[i]))
                                 {
                                     Regex timezone = new Regex(@"\sICT");
@@ -71,10 +78,6 @@ namespace PX_maps.Controllers
                             }
                             csvData.Rows.Add(fieldData);
                         }
-                        else
-                        {
-
-                        }
                     }
                 }
             }
@@ -85,6 +88,9 @@ namespace PX_maps.Controllers
 
 
         }
+        /*  This function takes a Datatable and inserts into the database
+         *  The database connects with the GPSDBContext Connection string
+         */ 
         static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
         {
             using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
@@ -99,6 +105,12 @@ namespace PX_maps.Controllers
                 dbConnection.Close();
             }
         }
+
+        /*  This function is fired once the user hits the submit button
+         *  It takes an array of files, saves the first file runs the file through 
+         *  GetDataTabletFromCSVFile function and once done deletes and moves onto next file
+         */
+
         [HttpPost]
         public ActionResult Index(IList<HttpPostedFileBase> files)
         {
@@ -127,6 +139,9 @@ namespace PX_maps.Controllers
         }
         public ActionResult ListFilesLeft(string file, int count, int total)
         {
+            /*  This function is meant to show how many files are left but does not work
+             * 
+             */ 
             System.Diagnostics.Debug.WriteLine("<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>");
             TempData["File"] = "<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>";
             return RedirectToAction("Running");
