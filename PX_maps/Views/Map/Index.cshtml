@@ -45,7 +45,7 @@
 			zoom: 10,
 			disableDefaultUI: true,
 			graggable: true,
-			scrollwheel:true,
+			scrollwheel: true,
 			styles: [
 {
 	"elementType": "geometry",
@@ -411,6 +411,7 @@
 							}
 							prevID = data[i].deviceID;
 						}
+						deviceCount.innerHTML = vData.features.length;
 						drawVoronoi(vData);
 						console.log("Process data");
 						console.log(vData);
@@ -749,7 +750,7 @@
 				var polygons = d3.geom.voronoi(positions);
 				var pathAttr = {
 					"d": function (d, i) { return "M" + polygons[i].join("L") + "Z" },
-					stroke: "black",
+					stroke: "none",
 					fill: function (d, i) {
 						return selectColorTrans(speedsArea[i]);
 					}
@@ -760,7 +761,7 @@
 						.enter()
 						.append("svg:path")
 						.attr("class", "cell")
-						.attr(pathAttr)
+						.attr(pathAttr);
 
 				var circleAttr = {
 					"cx": function (d, i) { return positions[i][0]; },

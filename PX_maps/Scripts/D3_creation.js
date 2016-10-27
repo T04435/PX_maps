@@ -21,15 +21,20 @@ function barChart(dailySpeed) {
 	D3Container.selectAll("h5").remove();
 	D3Container.select("h1").attr("class", "D3graphHeader")
 	D3Container.append('h3').text($("#week-day").val() + ' bar chart').attr("class", "D3graphSubHeader");
-	D3Container.append('p').html("Max Speed: <span>" + maxSpeed + "</span>").attr("class", "D3graphMaxSpeed");
-	D3Container.append('p').html("Min Speed: <span>" + minSpeed + "</span>").attr("class", "D3graphMinSpeed");
+	D3Container.append('p').html("Max Speed: <span>" + maxSpeed + " km/h</span>").attr("class", "D3graphMaxSpeed");
+	D3Container.append('p').html("Min Speed: <span>" + minSpeed + " km/h</span>").attr("class", "D3graphMinSpeed");
+	D3Container.append('p').html("Average Speed(km/h)").attr("class", "D3YAxis");
+	D3Container.append('p').html("Time of Day(24 h)").attr("class", "D3XAxis");
 
 	var barPadding = 4;
+
+	
+
 	var SVG = D3Container.append("svg")
 	.attr("width", "100%")
 	.attr("height", h)
 	.classed('D3barChart', true);
-
+	
 
 
 	SVG.selectAll("rect")

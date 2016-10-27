@@ -275,6 +275,9 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\Media\chris.jpg" />
+    <Content Include="Content\Media\favicon-16x16.png" />
+    <Content Include="Content\Media\favicon-32x32.png" />
+    <Content Include="Content\Media\favicon.ico" />
     <Content Include="Content\Media\fidel.jpg" />
     <Content Include="Content\Media\fidel.png" />
     <Content Include="Content\Media\kieren.jpg" />

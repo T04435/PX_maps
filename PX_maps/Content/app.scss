@@ -215,6 +215,19 @@ svg:not(:root) {
 	position: absolute;
 }
 
+.D3YAxis {
+	position: absolute;
+	transform-origin: left;
+	transform: translate(-50px) rotateZ(-90deg);
+}
+
+.D3XAxis {
+	position: absolute;
+	transform-origin: center;
+	bottom: -60px;
+	right: 50%;
+}
+
 .D3graphHeader {
 	bottom: $D3ChartHearderPos - 10;
 	width: 100vw;
@@ -381,7 +394,7 @@ svg:not(:root) {
 */
 #legend {
 	display: block;
-	z-index: 9999;
+	z-index: 50;
 	position: fixed;
 	bottom: -5px;
 	right: 10%;
