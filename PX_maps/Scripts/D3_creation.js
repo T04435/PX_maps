@@ -8,17 +8,27 @@
 }
 
 function barChart(dailySpeed) {
-	//appending SVG to main container
-	var w = 35 * dailySpeed.length;
-	var h = Math.max.apply(null, dailySpeed) + 25;
+	//Individual Bar Chart width
+	const barW = 35;
+	//Calculating Chart width 
+	var w = barW * dailySpeed.length;
+	//Calculating Chart height by geeting the max value on the data and adding 'barW' for extra padding
+	var h = Math.max.apply(null, dailySpeed) + barW;
+	//Calculating data max speed
 	var maxSpeed = Math.max.apply(null, dailySpeed);
+	//Calculating data min speed
 	var minSpeed = Math.min.apply(null, dailySpeed);
+	//Padding bewteen the Chart bars.
+	var barPadding = 4;
 
-	// Selecting & reseting D3 main container
+
+	//Selecting & reseting D3 main container
 	var D3Container = d3.select("#D3dailyAVGSpeedGraph");
 	D3Container.select("svg").remove();
 	D3Container.selectAll("h3").remove();
 	D3Container.selectAll("h5").remove();
+	D3Container.selectAll("p").remove();
+	//Adding hearders, max/min speeds and AXIS
 	D3Container.select("h1").attr("class", "D3graphHeader")
 	D3Container.append('h3').text($("#week-day").val() + ' bar chart').attr("class", "D3graphSubHeader");
 	D3Container.append('p').html("Max Speed: <span>" + maxSpeed + " km/h</span>").attr("class", "D3graphMaxSpeed");
@@ -26,46 +36,43 @@ function barChart(dailySpeed) {
 	D3Container.append('p').html("Average Speed(km/h)").attr("class", "D3YAxis");
 	D3Container.append('p').html("Time of Day(24 h)").attr("class", "D3XAxis");
 
-	var barPadding = 4;
-
-	
-
+	//Adding svg to main container
 	var SVG = D3Container.append("svg")
 	.attr("width", "100%")
 	.attr("height", h)
 	.classed('D3barChart', true);
-	
 
 
+	//Adding one rect to the SVG per each data field found in the data set.
 	SVG.selectAll("rect")
 			.data(dailySpeed)
 			.enter()
-			.append("rect")
-			.attr("x", 0)
-			.transition()
-			.attr("x", function (d, i) {
-				return i * (w / dailySpeed.length)
+			.append("rect")																					// add rect to play as a Bar
+			.attr("x", 0)																						// set X initial position to 0
+			.transition()																						// will have a trasition from intial position to next set position
+			.attr("x", function (d, i) {														// set X final position to perform transition
+				return i * (w / dailySpeed.length)										// i is an iterator as a for loop so it will increment the offset (w / dailySpeed.length) as it increases.
 			})
-			.attr("y", function (d) {
+			.attr("y", function (d) {																// set Y position of the rect to be on the oposite side 
 				return h - d * 10;
 			})
-			.attr("fill", function (d) {
-				if (d === maxSpeed) {
+			.attr("fill", function (d) {														// fill the rect 
+				if (d === maxSpeed) {																	// fill green for max speed
 					return 'rgba(127, 176, 105, 1)';
 				}
-				if (d === minSpeed) {
+				if (d === minSpeed) {																	// fill red for min speed
 					return 'rgba(239, 100, 97, 1)';
 				}
-				return 'rgba(249, 220, 92, 1)';
+				return 'rgba(249, 220, 92, 1)';												// fill yellow for all other speeds
 			})
-			.attr("width", w / dailySpeed.length - barPadding)
+			.attr("width", w / dailySpeed.length - barPadding)      // set with for the rect
 			.attr("height", function (d) {
-				return d * 10;
+				return d * 10;																				// *10 to scale the size(height)
 			})
 			.attr("rx", "5")
-			.attr("class", "D3bar");
+			.attr("class", "D3bar");																// adding css class for extra styles
 
-	SVG.selectAll("text.speed")
+	SVG.selectAll("text.speed")																	
 	.data(dailySpeed)
 	.enter()
 			.append("text")

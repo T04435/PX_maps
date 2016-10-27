@@ -155,7 +155,7 @@ svg:not(:root) {
 .D3XAxis {
   position: absolute;
   transform-origin: center;
-  bottom: -60px;
+  bottom: -45px;
   right: 50%; }
 
 .D3graphHeader {
@@ -363,7 +363,7 @@ svg:not(:root) {
     border-bottom-right-radius: 7px;
     transform-origin: left; }
     #dashboard.dashboard-close #dashboard-control {
-      position: initial;
+      position: relative;
       margin-bottom: 10000px; }
   #dashboard::-webkit-scrollbar {
     display: none; }

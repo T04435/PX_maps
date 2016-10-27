@@ -224,7 +224,7 @@ svg:not(:root) {
 .D3XAxis {
 	position: absolute;
 	transform-origin: center;
-	bottom: -60px;
+	bottom: -45px;
 	right: 50%;
 }
 
@@ -485,7 +485,7 @@ svg:not(:root) {
 		transform-origin: left;
 
 		& #dashboard-control {
-			position: initial;
+			position: relative;
 			margin-bottom: 10000px;
 		}
 	}
