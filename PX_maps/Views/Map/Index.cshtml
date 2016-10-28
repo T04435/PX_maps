@@ -369,7 +369,7 @@
 </script>
 <script>
 
-	function json(option) {
+	function mapControls(option) {
 		var jsonData = JSON.stringify({ hour: $("#hour-range").val(), day: $("#week-day").val() })
 		$.ajax({
 			type: 'POST',
@@ -492,10 +492,8 @@
 		}
 		for (var i = 0; i < length; i++) {
 			newCoordPoints.push(coordPoints[i + 1]);
-			//newCoordPoints.push(coordPoints[coordPoints.length - 1]);
 		}
 		for (var i = 0; i < length; i++) {
-			//newCoordPoints.push(coordPoints[length + 1]);
 			newCoordPoints.push(coordPoints[coordPoints.length - (1 + i)]);
 		}
 		newCoordPoints.push(coordPoints[coordPoints.length - 1]);
@@ -506,7 +504,6 @@
 		directionsService = new google.maps.DirectionsService();
 		var waypointArr = [];
 		var start, finish, lastPnt;
-		//console.log(coordPoints);
 		for (var i = 0; i < coordPoints.length; i++) {
 			if (coordPoints[i] === lastPnt) {
 				continue;
@@ -518,12 +515,8 @@
 				stopover: true
 			});
 		}
-		//console.log(waypointArr);
 		start = (waypointArr.shift()).location;
 		finish = waypointArr.pop().location;
-
-		//console.log(start + finish);
-
 		var request = {
 			origin: start,
 			destination: finish,
@@ -552,7 +545,6 @@
 					suppressInfoWindows: true,
 					suppressMarkers: true
 				});
-				//renderArr[i].setMap(map);
 				renderArr[i].setDirections(result);
 				renderPolylines(renderArr[i], requestArr[i].colour, requestArr[i].avgSpeed);
 

@@ -21,18 +21,25 @@ namespace PX_maps.Controllers
             return View();
         }
 
+        /*
+         * This function takes a path of a file tries to add them
+         * to the database, it uses regular expressions
+         * this website will help with testing http://regexstorm.net/tester
+         */
         private void GetDataTabletFromCSVFile(string csv_file_path)
         {
-            DataTable csvData = new DataTable();
+            DataTable csvData = new DataTable(); //Csv reader is used to store the file currently being read
             try
             {
                 using (TextFieldParser csvReader = new TextFieldParser(csv_file_path))
                 {
-                    //Csv reader is used to store the file currently being read
+                    
                     csvReader.SetDelimiters(new string[] { "," });
                     csvReader.HasFieldsEnclosedInQuotes = false;
                     string[] colFields = new string[9];
-					//The coloumns need to be the same as the database table and have the same number of fields				
+
+					//The coloumns need to be the same as the database table and have the same number of fields	
+                    			
                     colFields[0] = "deviceId";
                     colFields[1] = "latitude";
                     colFields[2] = "longitude";
@@ -44,7 +51,7 @@ namespace PX_maps.Controllers
                     colFields[8] = "isoDate";
 
                     Regex csvrgx = new Regex(@"^\w{3,9}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,6}\,\d{1,3}\.\d{1,2}\,\d\.\d\,\d\,\d\,\d\,[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}\s\d{2}\:\d{2}\:\d{2}\s[A-Z]{3}\s\d{4}$");
-                    foreach (string column in colFields)
+                    foreach (string column in colFields) // change each coloumn of the csv/txt to Datatable
                     {
                         DataColumn datecolumn = new DataColumn(column);
                         csvData.Columns.Add(datecolumn);
@@ -54,9 +61,10 @@ namespace PX_maps.Controllers
                     {
                         string[] fieldData = csvReader.ReadFields();
                         string fieldDataString = string.Join(",", fieldData);
-                        /*This regex will check the current row and if it doesnt match the regex it will move onto the next row
-                        * The regex will accept this "51C18087,10.88865,106.81669,0.0,0.0,0,1,0,Wed Sep 10 00:15:00 ICT 2014"
-                        */
+                        /* 
+                         * This regex will check the current row and if it doesnt match the regex it will move onto the next row
+                         *  The regex will accept this "51C18087,10.88865,106.81669,0.0,0.0,0,1,0,Wed Sep 10 00:15:00 ICT 2014"
+                         */
                         if (csvrgx.IsMatch(fieldDataString))
                         {
                             for (int i = 0; i < fieldData.Length; i++)
@@ -81,14 +89,16 @@ namespace PX_maps.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) //Print any errors
             {
+                System.Diagnostics.Debug.WriteLine(ex);
             }
             InsertDataIntoSQLServerUsingSQLBulkCopy(csvData);
 
 
         }
-        /*  This function takes a Datatable and inserts into the database
+        /*  
+         *  This function takes a Datatable and inserts into the database
          *  The database connects with the GPSDBContext Connection string
          */ 
         static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
@@ -106,7 +116,8 @@ namespace PX_maps.Controllers
             }
         }
 
-        /*  This function is fired once the user hits the submit button
+        /*  
+         *  This function is fired once the user hits the submit button
          *  It takes an array of files, saves the first file runs the file through 
          *  GetDataTabletFromCSVFile function and once done deletes and moves onto next file
          */
@@ -139,8 +150,8 @@ namespace PX_maps.Controllers
         }
         public ActionResult ListFilesLeft(string file, int count, int total)
         {
-            /*  This function is meant to show how many files are left but does not work
-             * 
+            /*  
+             *  This function is meant to show how many files are left but does not work
              */ 
             System.Diagnostics.Debug.WriteLine("<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>");
             TempData["File"] = "<p>Current file is: " + file + " Number of files left: " + count + " / " + total + "</p>";

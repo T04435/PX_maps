@@ -20,10 +20,16 @@ namespace PX_maps.Controllers
             return View();
         }
 
+        /*
+         * This function gets a json response with hour and day
+         * it then builds a select query with the given values
+         * It then returns a json response from the given database query 
+         */
+
         public JsonResult getListLatLongs(string hour, string day)
         {
             SqlDataReader dr;
-            List<LatLong> dbCoordinates = new List<LatLong>();
+            List<LatLong> dbCoordinates = new List<LatLong>(); //list will be used to store the resulting query
 
             using (SqlConnection dbconn = new SqlConnection(ConfigurationManager.ConnectionStrings["GPSDBContext"].ConnectionString))
             {
@@ -51,8 +57,8 @@ namespace PX_maps.Controllers
                 }
                 dbconn.Close();
             }
-            var result = Json(dbCoordinates, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = int.MaxValue;
+            var result = Json(dbCoordinates, JsonRequestBehavior.AllowGet); //builds a json reponse
+            result.MaxJsonLength = int.MaxValue; //this allows it to override the default size to a value around 10mbs
             return result;
         }
     }
