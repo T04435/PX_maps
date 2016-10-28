@@ -1,11 +1,25 @@
-﻿function clearD3() {
-	let D3Charts = document.querySelectorAll('[id^="D3"]');
+﻿
+/*
+ * This function is used to clear all the D3 chart.
+ * It will select all elements with IDs starting with "D3"
+ * And clear all the elements inside of them.
+ */
 
+function clearD3() {
+	//Select all the elements with IDs starting with "D3"
+	let D3Charts = document.querySelectorAll('[id^="D3"]');
+	//Clear all the elements inside.
 	for (var i = 0; i < D3Charts.length; i++) {
 		D3Charts[i].innerHTML = "";
 	}
 
 }
+
+
+/*
+ * This function creates the daily average speed Chart
+ * by doing use of the D3 library
+ */
 
 function barChart(dailySpeed) {
 	//Individual Bar Chart width
@@ -28,11 +42,16 @@ function barChart(dailySpeed) {
 	D3Container.selectAll("h3").remove();
 	D3Container.selectAll("h5").remove();
 	D3Container.selectAll("p").remove();
-	//Adding hearders, max/min speeds and AXIS
+
+	//Adding hearders
 	D3Container.select("h1").attr("class", "D3graphHeader")
 	D3Container.append('h3').text($("#week-day").val() + ' bar chart').attr("class", "D3graphSubHeader");
+
+	//Adding maximun and minimun speeds.
 	D3Container.append('p').html("Max Speed: <span>" + maxSpeed + " km/h</span>").attr("class", "D3graphMaxSpeed");
 	D3Container.append('p').html("Min Speed: <span>" + minSpeed + " km/h</span>").attr("class", "D3graphMinSpeed");
+
+	//Adding the Axis for the Graph
 	D3Container.append('p').html("Average Speed(km/h)").attr("class", "D3YAxis");
 	D3Container.append('p').html("Time of Day(24 h)").attr("class", "D3XAxis");
 
@@ -43,10 +62,10 @@ function barChart(dailySpeed) {
 	.classed('D3barChart', true);
 
 
-	//Adding one rect to the SVG per each data field found in the data set.
-	SVG.selectAll("rect")
-			.data(dailySpeed)
-			.enter()
+	//Adding one rect to the SVG for each data field found in the data set.
+	SVG.selectAll("rect")	
+			.data(dailySpeed)																				// data to be read
+			.enter()																								// enter data
 			.append("rect")																					// add rect to play as a Bar
 			.attr("x", 0)																						// set X initial position to 0
 			.transition()																						// will have a trasition from intial position to next set position
@@ -72,6 +91,8 @@ function barChart(dailySpeed) {
 			.attr("rx", "5")
 			.attr("class", "D3bar");																// adding css class for extra styles
 
+
+	//Adding text for speed and hour to the SVG for each data field found in the data set.
 	SVG.selectAll("text.speed")																	
 	.data(dailySpeed)
 	.enter()
