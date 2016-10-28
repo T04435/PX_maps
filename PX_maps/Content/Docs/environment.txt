@@ -1,0 +1,63 @@
+﻿Microsoft Visual Studio Community 2015
+Version 14.0.25424.00 Update 3
+Microsoft .NET Framework
+Version 4.6.01586
+
+Installed Version: Community
+
+Visual Basic 2015   00322-20000-00000-AA790
+Microsoft Visual Basic 2015
+
+Visual C# 2015   00322-20000-00000-AA790
+Microsoft Visual C# 2015
+
+Visual C++ 2015   00322-20000-00000-AA790
+Microsoft Visual C++ 2015
+
+Application Insights Tools for Visual Studio Package   7.10.01020.1
+Application Insights Tools for Visual Studio
+
+ASP.NET AJAX Control Toolkit   1.0
+ASP.NET AJAX Control Toolkit Visual Studio integration package
+
+ASP.NET and Web Tools 2015.1 (Beta8)   14.1.11107.0
+ASP.NET and Web Tools 2015.1 (Beta8)
+
+ASP.NET Web Frameworks and Tools 2012.2   4.1.41102.0
+For additional information, visit http://go.microsoft.com/fwlink/?LinkID=309563
+
+ASP.NET Web Frameworks and Tools 2013   5.2.40314.0
+For additional information, visit http://www.asp.net/
+
+Common Azure Tools   1.8
+Provides common services for use by Azure Mobile Services and Microsoft Azure Tools.
+
+GitHub.VisualStudio   1.0
+A Visual Studio Extension that brings the GitHub Flow into Visual Studio.
+
+JavaScript Language Service   2.0
+JavaScript Language Service
+
+JavaScript Project System   2.0
+JavaScript Project System
+
+Microsoft Azure Mobile Services Tools   1.4
+Microsoft Azure Mobile Services Tools
+
+NuGet Package Manager   3.4.4
+NuGet Package Manager in Visual Studio. For more information about NuGet, visit http://docs.nuget.org/.
+
+PreEmptive Analytics Visualizer   1.2
+Microsoft Visual Studio extension to visualize aggregated summaries from the PreEmptive Analytics product.
+
+SQL Server Data Tools   14.0.60519.0
+Microsoft SQL Server Data Tools
+
+TypeScript   1.8.35.0
+TypeScript tools for Visual Studio
+
+Web Compiler   1.11.319
+Compiler for LESS, Sass and CoffeeScript files
+
+Web Essentials 2015.3   3.0.235
+Adds many useful features to Visual Studio for web developers. Requires Visual Studio 2015
