@@ -12,7 +12,6 @@ function clearD3() {
 	for (var i = 0; i < D3Charts.length; i++) {
 		D3Charts[i].innerHTML = "";
 	}
-
 }
 
 
@@ -38,18 +37,26 @@ function barChart(dailySpeed) {
 
 	//Selecting & reseting D3 main container
 	var D3Container = d3.select("#D3dailyAVGSpeedGraph");
-	D3Container.select("svg").remove();
-	D3Container.selectAll("h3").remove();
-	D3Container.selectAll("h5").remove();
-	D3Container.selectAll("p").remove();
+	D3Container.select("svg").remove();												// removes all svg tags
+	D3Container.selectAll("h3").remove();											// removes all h3 tags
+	D3Container.selectAll("p").remove();											// removes all p tags
 
 	//Adding hearders
-	D3Container.select("h1").attr("class", "D3graphHeader")
-	D3Container.append('h3').text($("#week-day").val() + ' bar chart').attr("class", "D3graphSubHeader");
+	D3Container.select("h1")																	// select the h1 on the page
+		.attr("class", "D3graphHeader");												// add class
+
+	D3Container.append('h3')																	// add h3 to main container
+		.text($("#week-day").val() + ' bar chart')							// set h3 content to "weekday(from select in dashboard) bar chart"
+		.attr("class", "D3graphSubHeader");											// add class
 
 	//Adding maximun and minimun speeds.
-	D3Container.append('p').html("Max Speed: <span>" + maxSpeed + " km/h</span>").attr("class", "D3graphMaxSpeed");
-	D3Container.append('p').html("Min Speed: <span>" + minSpeed + " km/h</span>").attr("class", "D3graphMinSpeed");
+	D3Container.append('p')																		// add a p tag to main container
+		.html("Max Speed: <span>" + maxSpeed + " km/h</span>")  // add html content to p maximun speed
+		.attr("class", "D3graphMaxSpeed");											// add class
+
+	D3Container.append('p')																		// add a p tag to main container
+		.html("Min Speed: <span>" + minSpeed + " km/h</span>")  // add html content to p minimun speed
+		.attr("class", "D3graphMinSpeed");											// add class
 
 	//Adding the Axis for the Graph
 	D3Container.append('p').html("Average Speed(km/h)").attr("class", "D3YAxis");
@@ -72,7 +79,7 @@ function barChart(dailySpeed) {
 			.attr("x", function (d, i) {														// set X final position to perform transition
 				return i * (w / dailySpeed.length)										// i is an iterator as a for loop so it will increment the offset (w / dailySpeed.length) as it increases.
 			})
-			.attr("y", function (d) {																// set Y position of the rect to be on the oposite side 
+			.attr("y", function (d) {																// set Y position of the rect to be on the oposite side. remove (h -) from the equation to get it.
 				return h - d * 10;
 			})
 			.attr("fill", function (d) {														// fill the rect 
@@ -93,34 +100,36 @@ function barChart(dailySpeed) {
 
 
 	//Adding text for speed and hour to the SVG for each data field found in the data set.
+	//In order to add two text values for the same element we have to diferentiate them
+	//by using a class text.class1 and text.class1
 	SVG.selectAll("text.speed")																	
 	.data(dailySpeed)
 	.enter()
-			.append("text")
-			.text(function (d) {
+			.append("text")																					// Add text containing speed value
+			.text(function (d) {																		// 'd' stores speed value
 				return d;
 			})
-			.attr("text-anchor", "start")
+			.attr("text-anchor", "start")														// setting the text to the start of the element
 	.attr("x", function (d, i) {
-		return i * (w / dailySpeed.length) + 4
+		return i * (w / dailySpeed.length) + barPadding;					// X positioning of the speed value in the middle of the bar.
 	})
 	.attr("y", function (d) {
-		return h - d * 10 + 24;
+		return h - d * 10 + 24;																		// Y positioning of the speed value under the top edge of the bar by 24 offset.
 	})
-.attr("class", "D3barSpeed");
+.attr("class", "D3barSpeed");																	// adding css class for extra styles
 
 	SVG.selectAll("text.hour")
 	.data(dailySpeed)
 	.enter()
-			.append("text")
-			.text(function (d, i) {
+			.append("text")																					// Add text containing hour value
+			.text(function (d, i) {																	// 'i' is an iterator so is used to count 0,1,2,3,4,...,23
 				return i;
 			})
-			.attr("text-anchor", "start")
+			.attr("text-anchor", "start")														// setting the text to the start of the element
 	.attr("x", function (d, i) {
-		return i * (w / dailySpeed.length) + 8
+		return i * (w / dailySpeed.length) + 8										// X positioning of the hour in the middle of the bar.
 	})
 	.attr("y", h + 16)
-.attr("class", "D3barHour");
+.attr("class", "D3barHour");																	// Y positioning of the speed value under the bottom edge of the bar by 8 offset.		
 
 }

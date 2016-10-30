@@ -1,10 +1,5 @@
-﻿//http://code.jquery.com/jquery-1.11.1.min.js add Jquery to bundle.
-/*
- * SideMenu CSS clases toggled to control
- * show/hide
- * active/disable
- */
-
+﻿
+// Array with HEX colors used for the traffic speed
 const Colors = [
 						"#7FB069", // LIGHT GREEN
 						"#034732", // GREEN
@@ -13,7 +8,7 @@ const Colors = [
 						"#EF6461", // LIGHT RED
 						"#630A08"  // RED
 ];
-
+// Array with RGBA colors used for the traffic speed AND allow transparency this are the same colors as before but with a 0.75 opacity
 const ColorsTransparent = [
 	"rgba(127,176,105,0.75)",
 	"rgba(3,71,50,0.75)",
@@ -23,31 +18,29 @@ const ColorsTransparent = [
 	"rgba(99,10,8,0.75)"
 ]
 
+//Get the current application PATH DOMAIN.COM:PORT/PATHNAME
 const path = window.location.pathname;
-var app = document.getElementById('app-container');
-var dashboardControl = document.getElementById('dashboard-control');
+//Get the dashboard 
 var dashboard = document.getElementById('dashboard');
+//Get the application container from _Layout
+var app = document.getElementById('app-container');
+//Get (show/hide) text from _Dashboard
+var dashboardControl = document.getElementById('dashboard-control');
+///Get map control section from _Dashboard
 var mapControl = document.getElementById('map-controls');
+///Get graph control section from _Dashboard
 var graphControl = document.getElementById('graph-controls');
-var trafficBtn = document.getElementById('get-traffic-btn');
+///Get input select for week days from _Dashboard
 var daySelect = document.getElementById('week-day');
+///Get input range for day hour from _Dashboard
 var timeSelect = document.getElementById('hour-selector');
 
 
 
-function redirectPath(ActualPath, nextPath) {
-	if (ActualPath !== nextPath) {
-		window.location = '..' + nextPath;
-	}
-}
-
-
-
+//Running an anonymous function on Window Load to only show the sections we need for current PATHNAME
 window.onload = function () {
-	console.log(path);
-
-
 	hideAllControls();
+	//Based on PATHNAME show correnponding elements
 	switch (path) {
 		case '/Map/Index':
 			classie.remove(mapControl, 'kfc-hidden');
@@ -60,6 +53,7 @@ window.onload = function () {
 
 			break;
 		case '/Home/About':
+
 			dashboardControl.click();
 		default:
 
@@ -83,7 +77,6 @@ dashboardControl.onclick = function () {
 		case 'Map/Index':
 			break;
 		default:
-			console.log('Enjoy Your Live');
 	}
 	if (dashboardControl.innerHTML === 'hide') {
 		dashboardControl.innerHTML = 'show';
@@ -93,7 +86,9 @@ dashboardControl.onclick = function () {
 }
 
 
-
+/*
+ * Hide all main elements in the Dashboard
+ */
 function hideAllControls() {
 	classie.add(timeSelect, 'kfc-hidden');
 	classie.add(daySelect, 'kfc-hidden');
@@ -101,18 +96,9 @@ function hideAllControls() {
 	classie.add(graphControl, 'kfc-hidden');
 }
 
-function disableOther(btn) {
-	if (btn !== 'showVisualizationMenu') {
-		classie.toggle(showVisualizationMenu, 'disable');
-	}
-	if (btn !== 'showMapsMenu') {
-		classie.toggle(showMapsMenu, 'disable');
-	}
-}
 
 function fillBox(hour) {
 	document.getElementById("hour-range-value").value = hour + ":00";
-	//console.log(hour + day);
 }
 
 /* HELPERS */
@@ -120,7 +106,9 @@ function hasClass(elem, cls) {
 	return (" " + elem.className + " ").indexOf(" " + cls + " ") > -1;
 }
 
-//returns a colour base on a *speed*
+/*
+ * returns a colour base on a *speed*
+ */
 function selectColor(speed) {
 	var colour;
 	if (speed <= 10) {
@@ -138,7 +126,10 @@ function selectColor(speed) {
 	}
 	return colour;
 }
-//returns a colour base on a *speed*
+
+/*
+ * returns a transparent colour base on a *speed*
+ */
 function selectColorTrans(speed) {
 	var colour;
 	if (speed <= 10) {

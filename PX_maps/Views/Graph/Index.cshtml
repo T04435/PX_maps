@@ -3,21 +3,28 @@
 </div>
 <script>
 
+	/*
+	 * This function will get the day from the input select on the dashboard
+	 * Send it to the backend in a AJAX call, then return the value and send
+	 * it to the barChart function in D3_creation.js file
+	 */
 	function createGraph() {
-		var jsonData = JSON.stringify({ day: $("#week-day").val() })
-		console.log(jsonData.toString());
+		//Converting the JS value in a JSON string
+		var jsonData = JSON.stringify({ day: $("#week-day").val() });
+		//Call backend funciton using AJAX
 		$.ajax({
-			type: 'POST',
-			url: '@Url.Action("getAVGDailySpeed")',
+			type: 'POST',																							// request by POST
+			url: '@Url.Action("getAVGDailySpeed")',										// action to run in the Controller
 			contentType: "application/json; charset=utf-8",
 			data: jsonData,
 			datatype: 'json',
 			success: function (data) {
-				
 				var dataset = [];
-				for (var i = 0; i < data.length ;i++) {
+				//Rounding and Adding all values in data to dataset.
+				for (var i = 0; i < data.length ; i++) {
 					dataset.push(Math.round(data[i].avgSpeed));
 				}
+				//Send dataset to barChart in 3D_creation.js
 				barChart(dataset);
 			}
 		});

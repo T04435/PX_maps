@@ -622,64 +622,6 @@
 	}
 
 
-	/**
-* This function will separate the *data* in *sectors*
-* Sectors will be Circles which will give average speed in the area in a infoWindow()
-*
-*/
-	function getSectors(data, sectors) {
-
-		var sumLat = 0;
-		var sumLon = 0;
-		var sumSpeed = 0;
-		var limit = data.length / sectors;
-		var sectorLimit = data.length / sectors;
-		var sector, sectorCircles = [];
-
-
-		for (var i = 0; i < data.length; i++) {
-			//add data values while in the limit
-			if (i < sectorLimit - 1) {
-				sumLat += data[i].latitude;
-				sumLon += data[i].longitude;
-				sumSpeed += data[i].speed;
-			}
-				// when limit is reached increase limit by double to track next range
-			else {
-				sector = {
-					lat: sumLat / limit,
-					lng: sumLon / limit,
-					speedC: selectColor(sumSpeed / limit)
-				}
-
-				sectorCircles.push(sector);
-
-				sectorLimit *= 2;
-				sumLat = 0;
-				sumLon = 0;
-				sumSpeed = 0;
-			}
-		}
-
-		for (var i = 0; i < sectorCircles.length; i++) {
-			console.log(sectorCircles[i]);
-			var busyCircle = new google.maps.Circle({
-				strokeColor: sectorCircles[i].speedC,
-				strokeOpacity: 1,
-				strokeWeight: 3,
-				fillColor: sectorCircles[i].speedC,
-				fillOpacity: 0.5,
-				map: map,
-				center: { lat: sectorCircles[i].lat, lng: sectorCircles[i].lng },
-				radius: limit
-			});
-			busyAreas.push(busyCircle);
-		}
-
-
-
-	}
-
 	//Clears the map
 	function clearMap() {
 		deviceCount.innerHTML = 0;
@@ -711,15 +653,17 @@
 
 	/**	VORONOI IMPLEMENTATION **/
 	function drawVoronoi(pointjson) {
+		//Creating a overlay layer on the google map
 		var overlay = new google.maps.OverlayView();
 
-		console.log({ pointjson });
 		overlay.onAdd = function () {
-
+			//appending a div container to the overlay
 			var layer = d3.select(this.getPanes().overlayLayer).append("div").attr("id", "D3SvgOverlay");
+			//appending svg to layer
 			var svg = layer.append("svg");
 			var svgoverlay = svg.append("g").attr("class", "AdminDivisions");
 			var markerOverlay = this;
+			// projectinf the overlay on the map, CSS at the top of the file is needed
 			var overlayProjection = markerOverlay.getProjection();
 			var googleMapProjection = function (coordinates) {
 				var googleCoordinates = new google.maps.LatLng(coordinates[0], coordinates[1]);
@@ -727,18 +671,22 @@
 				return [pixelCoordinates.x + 4000, pixelCoordinates.y + 4000];
 			}
 
+
 			overlay.draw = function () { };
 			overlay.draw = function () {
 				var pointdata = pointjson.features;
 				var positions = [];
 				var speedsArea = [];
 
+				// getting all the speeds in an array
 				pointdata.forEach(function (d) {
 					speedsArea.push(d.properties.speed);
 				});
+				// getting all positions from the map projection
 				pointdata.forEach(function (d) {
 					positions.push(googleMapProjection(d.geometry.coordinates));
 				});
+
 				var polygons = d3.geom.voronoi(positions);
 				var pathAttr = {
 					"d": function (d, i) { return "M" + polygons[i].join("L") + "Z" },
@@ -747,6 +695,7 @@
 						return selectColorTrans(speedsArea[i]);
 					}
 				};
+				// Adding all the path from point data
 				svgoverlay.selectAll("path")
 						.data(pointdata)
 						.attr(pathAttr)
@@ -761,6 +710,7 @@
 					"r": 2,
 					fill: "black"
 				}
+				// Adding point as circles for each device
 				svgoverlay.selectAll("circle")
 						.data(pointdata)
 						.attr(circleAttr)
